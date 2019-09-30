@@ -3,14 +3,14 @@ rm -rf ./docker-extract/
 mkdir ./docker-extract/
 
 #Essas variaveis precisam estar na release também
-export DOCKER_REGISTRY=nexusdocker.tjmt.jus.br
+export DOCKER_REGISTRY=""
 export VERSION=20190927-1
 export BRANCH=feature-1
 
 
 echo "-----------------------------------------------------------------------"
 echo "Iniciando cd-build.sh."
-echo "ImageName: ${DOCKER_REGISTRY}/dsa/dotnetcoreseed.tjmt.jus.br:${BRANCH}.${VERSION}"
+echo "ImageName: ${DOCKER_REGISTRY}/app:${BRANCH}.${VERSION}"
 echo "-----------------------------------------------------------------------"
 
 
@@ -26,13 +26,13 @@ echo "-----------------------------------------------------------------------"
 
 #Variaveis locais, utilizado para copiar os arquivos do container
 ARTIFACT_STAGING_DIRECTORY="./docker-extract"
-DOCKERCOMPOSE_BUILD_VOLUME_NAME="dotnetcoreseed-extract-testresults"
+DOCKERCOMPOSE_BUILD_VOLUME_NAME="app-extract-testresults"
 DOCKERCOMPOSE_BUILD_CONTAINER_NAME="container-testResults"
 DOCKERCOMPOSE_BUILD_TEST_RESULT_PATH="/TestResults"
 
 #Build
-export SONARQUBE_URL="http://sonarqube.tjmt.jus.br"
-export SONARQUBE_LOGIN="c29b8801c173a4d9605a5eba61a069272b80dc7c"
+export SONARQUBE_URL="http://localhost:9000"
+export SONARQUBE_LOGIN=""
 export RUN_TEST="true"
 export RUN_PROJECT="false"
 export RUN_SONARQUBE="true"
@@ -54,7 +54,7 @@ echo "-----------------------------------------------------------------------"
 echo ""
 echo "-----------------------------------------------------------------------"
 echo "Run docker-compose.cd-publish.yml"
-export DOCKERCOMPOSE_PUBLISH_VOLUME_NAME="dotnetcoreseed-extract-publish"
+export DOCKERCOMPOSE_PUBLISH_VOLUME_NAME="app-extract-publish"
 export DOCKERCOMPOSE_PUBLISH_CONTAINER_NAME="container-publish"
 export DOCKERCOMPOSE_PUBLISH_APP_PATH="/var/release/"
 

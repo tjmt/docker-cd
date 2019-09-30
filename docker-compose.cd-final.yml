@@ -2,6 +2,6 @@ version: '3.6'
 
 services:
   app:
-    image: ${DOCKER_REGISTRY}/dsa/app:${BRANCH}.${VERSION}
+    image: ${DOCKER_REGISTRY}/app:${BRANCH}.${VERSION}
     build:
       target: runtime

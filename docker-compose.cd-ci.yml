@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
   app:           
-    image: ${DOCKER_REGISTRY}/dsa/app:${BRANCH}.${VERSION}-ci
+    image: ${DOCKER_REGISTRY}/app:${BRANCH}.${VERSION}-ci
     container_name: app-${BRANCH}-ci
     build:
       target: ci

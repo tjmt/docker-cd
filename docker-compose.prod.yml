@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   app:
-    image: ${DOCKER_REGISTRY}/dsa/app:${BRANCH}.${VERSION}
+    image: ${DOCKER_REGISTRY}/app:${BRANCH}.${VERSION}
     environment:
       RUN_TEST: ${RUN_TEST:-false}
       ASPNETCORE_ENVIRONMENT: Production

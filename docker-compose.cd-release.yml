@@ -2,21 +2,40 @@ version: '3.6'
 
 services:
   app:
-    image: ${DOCKER_REGISTRY}/dsa/app:${BRANCH}.${VERSION}-publish
+    image: ${DOCKER_REGISTRY}/app:${BRANCH}.${VERSION}-publish
     container_name: app-${BRANCH}-publish   
     environment:
-      DEPLOY_NUGET: ${DEPLOY_NUGET:-false}
-      NUGET_LIFECYCLE_VERSION: ${NUGET_LIFECYCLE_VERSION}
-      DEPLOY_NPM: ${DEPLOY_NPM:-false}
-      NPM_LIFECYCLE_VERSION: ${NPM_LIFECYCLE_VERSION}
-      DEPLOY_KUBERNETES: ${DEPLOY_KUBERNETES:-false}
-      DESTROY_KUBERNETES_ENVIRONMENT: ${DESTROY_KUBERNETES_ENVIRONMENT:-false}
-      KUBERNETES_FOLDER: ${KUBERNETES_FOLDER}
-      KUBECONFIG_PATH: ${KUBECONFIG_PATH}
-      COMPOSE_PATH: ${COMPOSE_PATH}
+      #----Nuget----
+      DEPLOY_NUGET: ${DEPLOY_NUGET:-false} #Indica se irá rodar o script que publica pacotes Nuget (nuget push)
+      NUGET_PACKAGES_FOLDER: ${NUGET_PACKAGES_FOLDER:-/var/release/packages/nuget} #Caminho do pacote Nuget (.nupkg)
+      NUGET_LIFECYCLE_VERSION: ${NUGET_LIFECYCLE_VERSION} #Lifecycle do pacote Nuget
+      NUGET_REGISTRY: ${NUGET_REGISTRY} #Registry para publicação do pacote Nuget
+      NUGET_USER: ${NUGET_USER} #Usuário para login no registry nuget
+      NUGET_PASS: ${NUGET_PASS} #Senha para login no registry nuget
+      #------       
+
+      #----NPM----
+      DEPLOY_NPM: ${DEPLOY_NPM:-false} #Indica se irá rodar o script que publica pacotes NPM (npm publish)
+      NPM_PACKAGES_FOLDER: ${NPM_PACKAGES_FOLDER:-/var/release/packages/npm} #Caminho do pacote NPM (.tgz)
+      NPM_LIFECYCLE_VERSION: ${NPM_LIFECYCLE_VERSION} #Lifecycle do pacote NPM
+      NPM_REGISTRY: ${NPM_REGISTRY} #Registry para publicação do pacote NPM
+      NPM_USER: ${NPM_USER} #Usuário para login no registry npm
+      NPM_PASS: ${NPM_PASS} #Senha para login no registry npm
+      NPM_EMAIL: ${NPM_EMAIL} #email para login no registry npm
+      #------
+
+      #----Kubernetes----
+      DEPLOY_KUBERNETES: ${DEPLOY_KUBERNETES:-false} #Indica se irá rodar o script que publica os yaml no Kubernetes (kubectl apply) 
+      DESTROY_KUBERNETES_ENVIRONMENT: ${DESTROY_KUBERNETES_ENVIRONMENT:-false} #Indica se irá rodar o script que deleta os yaml no Kubernetes (kubectl delete)
+      KUBERNETES_FOLDER: ${KUBERNETES_FOLDER:-/var/release/source} #Caminho dos arquivos yaml para publicação
+      KUBECONFIG_PATH: ${KUBECONFIG_PATH:-/var/release/source/kubeconfig} #Caminho do kubeconfig para publicação
+
+      #----Kompose----
+      #Caso o Kompose precise de outras variaveis de ambiente, deve ser passado aqui.
+      COMPOSE_PATH: ${COMPOSE_PATH} #Caso deseja utilizar Kompose para converter yml em yaml, informar o caminho completo do docker-compose a ser transformado.
       DOCKER_REGISTRY: ${DOCKER_REGISTRY}
       VERSION: ${VERSION}
-      BRANCH: ${BRANCH}    
+      BRANCH: ${BRANCH}
 
 networks:
   default:

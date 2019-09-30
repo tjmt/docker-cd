@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
   app:
-    image: ${DOCKER_REGISTRY}/dsa/app:local
+    image: ${DOCKER_REGISTRY}/app:local
     build:
       target: build
       args:
