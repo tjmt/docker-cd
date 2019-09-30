@@ -1,0 +1,21 @@
+version: '3.6'
+
+services:
+  app:           
+    image: ${DOCKER_REGISTRY}/dsa/app:${BRANCH}.${VERSION}-publish
+    container_name: app-${BRANCH}-publish 
+    build:
+      target: release
+      args:
+        VERSION: ${VERSION}
+        BRANCH: ${BRANCH}      
+    volumes:
+      - app:/var/release/
+
+volumes:
+  app:
+    name: ${DOCKERCOMPOSE_PUBLISH_VOLUME_NAME:-app-extract-app}
+
+networks:
+  default:
+    name: app-${BRANCH}-${VERSION}-publish       

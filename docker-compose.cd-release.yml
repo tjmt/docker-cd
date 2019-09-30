@@ -1,0 +1,23 @@
+version: '3.6'
+
+services:
+  app:
+    image: ${DOCKER_REGISTRY}/dsa/app:${BRANCH}.${VERSION}-publish
+    container_name: app-${BRANCH}-publish   
+    environment:
+      DEPLOY_NUGET: ${DEPLOY_NUGET:-false}
+      NUGET_LIFECYCLE_VERSION: ${NUGET_LIFECYCLE_VERSION}
+      DEPLOY_NPM: ${DEPLOY_NPM:-false}
+      NPM_LIFECYCLE_VERSION: ${NPM_LIFECYCLE_VERSION}
+      DEPLOY_KUBERNETES: ${DEPLOY_KUBERNETES:-false}
+      DESTROY_KUBERNETES_ENVIRONMENT: ${DESTROY_KUBERNETES_ENVIRONMENT:-false}
+      KUBERNETES_FOLDER: ${KUBERNETES_FOLDER}
+      KUBECONFIG_PATH: ${KUBECONFIG_PATH}
+      COMPOSE_PATH: ${COMPOSE_PATH}
+      DOCKER_REGISTRY: ${DOCKER_REGISTRY}
+      VERSION: ${VERSION}
+      BRANCH: ${BRANCH}    
+
+networks:
+  default:
+    name: app-${BRANCH}-${VERSION}-release

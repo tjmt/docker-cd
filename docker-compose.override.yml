@@ -1,0 +1,19 @@
+version: '3.6'
+
+services:
+  app:
+    image: ${DOCKER_REGISTRY}/dsa/app:local
+    build:
+      target: build
+      args:
+        CONFIGURATION: "${CONFIGURATION:-Debug}"
+    environment:
+      ASPNETCORE_ENVIRONMENT: LOCAL
+      ASPNETCORE_URLS: 'https://+:443;http://+:80'
+      ASPNETCORE_HTTPS_PORT: '5556'
+    ports:
+      - "5555:80"
+      - "5556:443"
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro

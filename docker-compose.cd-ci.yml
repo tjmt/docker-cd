@@ -1,0 +1,27 @@
+version: '3.6'
+
+services:
+  app:           
+    image: ${DOCKER_REGISTRY}/dsa/app:${BRANCH}.${VERSION}-ci
+    container_name: app-${BRANCH}-ci
+    build:
+      target: ci
+    environment:
+      RUN_TEST: ${RUN_TEST:-true}          
+      ASPNETCORE_ENVIRONMENT: 'LOCAL'
+      RUN_SONARQUBE: ${RUN_SONARQUBE:-false}
+      SONARQUBE_URL: ${SONARQUBE_URL}
+      SONARQUBE_LOGIN: ${SONARQUBE_LOGIN}
+      SONARQUBE_PROJECT: app
+      SONARQUBE_PROJECT_VERSION: ${VERSION}
+    volumes:
+      - test-result:/TestResults      
+
+
+volumes:
+  test-result:
+    name: ${DOCKERCOMPOSE_CI_VOLUME_NAME:-app-test-results}
+
+networks:
+  default:
+    name: ns-app-${BRANCH}-${VERSION}-ci    
