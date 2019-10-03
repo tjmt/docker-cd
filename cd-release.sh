@@ -27,36 +27,45 @@ export KUBECONFIG_PATH="/var/release/source/kubeconfig"
 
  #----Kompose
 export DOCKER_REGISTRY=""
-export VERSION="20190927-1"
+export VERSION=$(date '+%Y%m%d')-1
 export BRANCH="feature-1"
 export COMPOSE_PATH="" #Direfente para cada ambiente
 
 
-echo "---------Publico a imagem final em dev"
+echo "---------Publico em alpha"
 export NUGET_LIFECYCLE_VERSION="alpha"
 export NPM_LIFECYCLE_VERSION="alpha"
-export KUBECONFIG_PATH=""
-export COMPOSE_PATH="docker-compose.dev.yml"
+#export KUBECONFIG_PATH=""
+export COMPOSE_PATH="docker-compose.alpha.yml"
+docker-compose -f "docker-compose.cd-release.yml" up --abort-on-container-exit
+docker-compose -f "docker-compose.cd-release.yml" down
+echo "-------------------------------------"
+
+echo "---------Publico em beta"
+export NUGET_LIFECYCLE_VERSION="beta"
+export NPM_LIFECYCLE_VERSION="beta"
+#export KUBECONFIG_PATH=""
+export COMPOSE_PATH="docker-compose.beta.yml"
 docker-compose -f "docker-compose.cd-release.yml" up --abort-on-container-exit
 docker-compose -f "docker-compose.cd-release.yml" down
 echo "-------------------------------------"
 
 
-echo "---------Publico a imagem final em stage"
+echo "---------Publico em rc"
 export NUGET_LIFECYCLE_VERSION="rc"
 export NPM_LIFECYCLE_VERSION="rc"
-export KUBECONFIG_PATH=""
-export COMPOSE_PATH="docker-compose.stage.yml"
+#export KUBECONFIG_PATH=""
+export COMPOSE_PATH="docker-compose.rc.yml"
 docker-compose -f "docker-compose.cd-release.yml" up --abort-on-container-exit
 docker-compose -f "docker-compose.cd-release.yml" down
 echo "-------------------------------------"
 
 
-echo "---------Publico a imagem final em prod"
-export NUGET_LIFECYCLE_VERSION=''
+echo "---------Publico em prod (stable)"
+export NUGET_LIFECYCLE_VERSION=""
 export NPM_LIFECYCLE_VERSION=""
-export KUBECONFIG_PATH=""
-export COMPOSE_PATH="docker-compose.stage.yml"
+#export KUBECONFIG_PATH=""
+export COMPOSE_PATH="docker-compose.stable.yml"
 docker-compose -f "docker-compose.cd-release.yml" up --abort-on-container-exit
 docker-compose -f "docker-compose.cd-release.yml" down
 echo "-------------------------------------"

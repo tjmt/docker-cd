@@ -5,7 +5,7 @@ services:
     image: ${DOCKER_REGISTRY}/app:${BRANCH}.${VERSION}
     environment:
       RUN_TEST: ${RUN_TEST:-false}
-      ASPNETCORE_ENVIRONMENT: Development
+      RUN_PROJECT: ${RUN_PROJECT:-true}
     ports:
       - "80:80"       
       - "443:443"      
@@ -19,8 +19,8 @@ services:
           cpus: '0.1'
           memory: 128M      
     labels:
-      kompose.service.expose: app-stage        
+      kompose.service.expose: app-beta        
 
 networks:
   default:
-    name: ns-app-stage
+    name: ns-app-beta

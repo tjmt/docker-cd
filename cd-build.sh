@@ -4,8 +4,8 @@ mkdir ./docker-extract/
 
 #Essas variaveis precisam estar na release também
 export DOCKER_REGISTRY=""
-export VERSION=20190927-1
-export BRANCH=feature-1
+export VERSION=$(date '+%Y%m%d')-1
+export BRANCH="feature-1"
 
 
 echo "-----------------------------------------------------------------------"
