@@ -1,12 +1,19 @@
 version: '3.6'
 
 services:
-  app:
-    image: ${DOCKER_REGISTRY}/app:${BRANCH}.${VERSION}
+  app-front-end:
+    image: ${DOCKER_REGISTRY}dsa/sistema.tjmt.jus.br:${BRANCH:-develop}.${VERSION:-local}
+    container_name: sistema.tjmt.jus.br-local
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        CONFIGURATION: "${CONFIGURATION:-Release}"      
-    environment:
-      RUN_TEST: ${RUN_TEST:-false}
+        BASE_HREF: /
+
+  app-back-end:
+    image: ${DOCKER_REGISTRY}dsa/sistema-api.tjmt.jus.br:${BRANCH:-develop}.${VERSION:-local}
+    build:
+      context: .
+      dockerfile: src/PJMT.Aurora.API/Dockerfile
+      args:
+        CONFIGURATION: "${CONFIGURATION:-Release}"

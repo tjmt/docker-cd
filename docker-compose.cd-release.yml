@@ -1,9 +1,9 @@
 version: '3.6'
 
-services:
-  app:
-    image: ${DOCKER_REGISTRY}/app:${BRANCH}.${VERSION}-publish
-    container_name: app-${BRANCH}-publish   
+services:  
+  app-front-end:
+    image: ${DOCKER_REGISTRY}dsa/sistema.tjmt.jus.br:${BRANCH:-develop}.${VERSION:-local}
+    container_name: sistema.tjmt.jus.br-release
     environment:
       #----Nuget----
       DEPLOY_NUGET: ${DEPLOY_NUGET:-false} #Indica se irá rodar o script que publica pacotes Nuget (nuget push)
@@ -39,4 +39,4 @@ services:
 
 networks:
   default:
-    name: app-${BRANCH}-${VERSION}-release
+    name: ns-sistema-${BRANCH}-${VERSION}-release

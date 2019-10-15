@@ -1,14 +1,18 @@
 version: '3.5'
 
 services:
-  app:
-    image: ${DOCKER_REGISTRY}/app:${BRANCH}.${VERSION}
+  app-front-end:
+    image: ${DOCKER_REGISTRY}dsa/sistema.tjmt.jus.br:${BRANCH}.${VERSION}-ci
+    ports:
+      - "80:4200"    
     environment:
       RUN_TEST: ${RUN_TEST:-false}
-      RUN_PROJECT: ${RUN_PROJECT:-true}            
-    ports:
-      - "80:80"       
-      - "443:443"      
+      RUN_PROJECT: ${RUN_PROJECT:-true}
+      AUTH_APP_URL: 'http://sistema-${BRANCH:-develop}-alpha.cnj.jus.br'
+      AUTH_AUTHORITY: 'https://sso-alpha.cnj.jus.br/auth/realms/master/'
+      AUTH_CLIENT_ID: 'sistema-${BRANCH:-develop}-alpha.cnj.jus.br'
+      AUTH_RESPONSE_TYPE: 'id_token token'
+      AUTH_SCOPE: 'openid profile email roles offline_access'
     deploy:
       replicas: 1
       resources:
@@ -19,8 +23,8 @@ services:
           cpus: '0.1'
           memory: 128M
     labels:
-      kompose.service.expose: app-${BRANCH}-alpha
+      kompose.service.expose: sistema-${BRANCH}-alpha.tjmt.jus.br
 
 networks:
   default:
-    name: ns-app-${BRANCH}-alpha
+    name: ns-sistema-${BRANCH}-alpha
