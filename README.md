@@ -51,17 +51,17 @@ Para uma imagem de aplicação em docker, existem 3 formas de se utilizar/config
 
 ## Como Funciona?
 
-O repositório GIT deve conter os seguintes arquivos:
-- `Dockerfile` - [Documentação](./docs/dockerfile.md)
-- `docker-compose.yml` - [Documentação](./docs/docker-compose.yml.md)
-- `docker-compose.override.yml` - [Documentação](./docs/docker-compose.override.yml.md)
+O repositório GIT deve conter os seguintes arquivos em sua raiz:
+- [`Dockerfile`](./docs/dockerfile.md)
+- [`docker-compose.yml`](./docs/docker-compose.yml.md)
+- [`docker-compose.override.yml`](./docs/docker-compose.override.yml.md)
 - CD/CI
-    - `docker-compose.cd-ci.yml` - [Documentação](./docs/docker-compose.cd-ci.yml.md)
-    - `docker-compose.cd-final.yml` - [Documentação](./docs/docker-compose.cd-final.yml.md)
-    - `docker-compose.cd-publish.yml` - [Documentação](./docs/docker-compose.cd-publish.yml.md)
-    - `docker-compose.cd-release.yml` - [Documentação](./docs/docker-compose.cd-release.yml.md)
+    - [`docker-compose.cd-ci.yml`](./docs/docker-compose.cd-ci.yml.md)
+    - [`docker-compose.cd-final.yml`](./docs/docker-compose.cd-final.yml.md)
+    - [`docker-compose.cd-publish.yml`](./docs/docker-compose.cd-publish.yml.md)
+    - [`docker-compose.cd-release.yml`](./docs/docker-compose.cd-release.yml.md)
 - Ambientes
-    - `docker-compose.{environment}.yml` [Documentação](./docs/docker-compose.environment.yml.md)
+    - [`docker-compose.{environment}.yml`](./docs/docker-compose.environment.yml.md)
 
   
 
