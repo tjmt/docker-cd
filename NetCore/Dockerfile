@@ -1,4 +1,4 @@
-#---------------Imagem usada para Instalação de ferramentas/bibliotecas adicionais
+#---------------Estágio usada para Instalação de ferramentas/bibliotecas adicionais
 FROM tjmt/dotnetcore/sdk:2.2.202 as base
 
 
