@@ -1,12 +1,8 @@
-# docker-compose.yml
+# Objetivo
 
-## Objetivo
-
-* Declaração de todos os services. 
-* Informar caminho do dockerfile
-* Passar argumentos padrões para o dockerfile
-
-Compila e roda a aplicação com configurações para suportar DEBUG na IDE (JAVA=Eclipse, .NET=Visual Studio, NODE=VSCode).
+* Declaração de todos os `services` obrigatórios.
+* Informar caminho do dockerfile.
+* Passar argumentos padrões para o dockerfile.
 
 Exemplo:
 - [docker-compose.yml](../docker-compose.yml)
