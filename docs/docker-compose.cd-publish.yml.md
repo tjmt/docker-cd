@@ -1,4 +1,7 @@
-> Responsável por conter os argumentos para geração dos artefatos do projeto (pacotes/ arquivos runtime)
+# Objetivo
+
+* Responsável por criar uma imagem com a tag `publish`, contendo os arquivos finais para `release`.
+* Deve passar os argumentos para geração dos artefatos do projeto (pacotes/ arquivos runtime)
 
 Pré requisitos:
 - tag: `${BRANCH}.${VERSION}-publish`
@@ -11,22 +14,5 @@ Pré requisitos:
         - Pasta padrão (`/var/release/`)
         - Nomear usando variavel de ambiente: `${DOCKERCOMPOSE_PUBLISH_VOLUME_NAME}`    
 
-```yml
-version: '3.5'
-
-services:
-  sistema-tjmt-jus-br:
-    image: ${DOCKER_REGISTRY}sistema.tjmt.jus.br:${BRANCH:-develop}.${VERSION:-local}-publish
-    container_name: sistema-${BRANCH:-develop}-publish.tjmt.jus.br
-    build:
-      target: release
-      args:
-        VERSION: ${VERSION:-local}
-        BRANCH: ${BRANCH:-develop}
-    volumes:
-      - app:/var/release/
-
-volumes:
-  app:
-    name: ${DOCKERCOMPOSE_PUBLISH_VOLUME_NAME:-sistema-extract-app}
-```
+Exemplo:
+- [docker-compose.cd-publish.yml](../docker-compose.cd-publish.yml)

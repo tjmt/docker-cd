@@ -2,13 +2,13 @@ version: '3.6'
 
 services:
   app-front-end:
-    image: ${DOCKER_REGISTRY}/dsa/sistema.tjmt.jus.br:${BRANCH}.${VERSION}-publish
-    container_name: sistema.tjmt.jus.br-${BRANCH}-publish 
+    image: ${DOCKER_REGISTRY}dsa/sistema.tjmt.jus.br:${BRANCH}.${VERSION}-publish
+    container_name: sistema.tjmt.jus.br-${BRANCH}-publish
     build:
       target: release
       args:
         VERSION: ${VERSION}
-        BRANCH: ${BRANCH}      
+        BRANCH: ${BRANCH}
     volumes:
       - app:/var/release/
 
@@ -18,4 +18,4 @@ volumes:
 
 networks:
   default:
-    name: ns-sistema-${BRANCH}-${VERSION}-publish       
+    name: ns-sistema-${BRANCH}-${VERSION}-publish
