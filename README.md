@@ -1,9 +1,9 @@
-Projeto contendo os arquivos principais para CI-CD em uma pipeline de automação.
-
+- Práticas usadas no TJMT para atender a abordagem de Continuous Integration / Continuous Deployment, usando docker.
 
 # Continuous Deployment usando Docker
 
-## Contextualização
+<details>
+  <summary>Contextualização</summary>
 
 Muitas instituições usam ferramentas (Jenkins, TFS, etc) para automatizar as fases de publicação de um software. Nelas, normalmente ficam informações como "comando (tasks) para baixar dependências, compilar, testar, publicar, etc" assim como configurações pertinentes a tecnologia do projeto ("JAVA, .NET, Node, etc").
 
@@ -11,8 +11,10 @@ Muitas vezes este método funciona bem, porém exige a necessidade de que uma eq
 
 Em um cenário onde as aplicações estão ficando cada vez mais difundidas e pequenas (microserviços), cria uma alta demanda para criação de todo esse processo para cada peça de software. Aliado ao fato de que as demandas por resultado de TI (especialmente criação e desenvolvimento de soluções) são cada vez mais velozes, faz com que busquemos meios para facilitar e/ou aprimorar toda essa etapa (criação da automação).
 
+</details>
 
-## Objetivo (Vantagens)
+<details>
+  <summary>Objetivo (Vantagens)</summary>
 
 Utilizar docker no desenvolvimento pode proporcionar múltiplas vantagens, porém, nem sempre, estas são utilizadas.
 
@@ -30,8 +32,11 @@ Seguem alguns pontos onde o Docker facilita em todo este processo:
 - Explicitação da aplicação quanto a suas fronteiras (docker-compose)
   > Permite que a configuração de integrações/fronteiras seja feito no arquivo de configuração do ambiente (docker-compose), explicitando suas dependências/integrações
 
+</details>
 
-### Imagem
+
+<details>
+  <summary>Imagem</summary>
 
 Para uma imagem de aplicação em docker, existem 3 formas de se utilizar/configurar:
 - **Imagem por ambiente** (não recomendado): Onde cada imagem já vem com as configurações específicas para um ambiente em questão. Ou seja, as configurações estão dentro do container (Ex: web.config, application.properties, etc) e sua mudança necessidta da criação de uma nova imagem.
@@ -40,6 +45,9 @@ Para uma imagem de aplicação em docker, existem 3 formas de se utilizar/config
   > Este modelo impede que uma imagem possa ser reutilizada em uma infraestrutura diferente, pois nela já contém as configurações de todos os possíveis ambientes.
 - **Imagem configurável** (recomendado): As configurações ficam a nível de **variáveis de ambiente**, possibilitando assim que possa ser criado um docker-compose informando as mesmas.
   > Permite que a imagem trafegue pelos ambientes de Integração Contínua e que seja modificado quando em uma infraestrutura diferente da qual foi concebida.
+
+</details>
+
 
 ## Como Funciona?
 
