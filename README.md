@@ -61,7 +61,7 @@ O repositório GIT deve conter os seguintes arquivos em sua raiz:
     - [`docker-compose.cd-publish.yml`](./docs/docker-compose.cd-publish.yml.md)
     - [`docker-compose.cd-release.yml`](./docs/docker-compose.cd-release.yml.md)
 - Ambientes
-    - [`docker-compose.{environment}.yml`](./docs/docker-compose.environment.yml.md)
+    - [`docker-compose.env-{environment}.yml`](./docs/docker-compose.env-environment.yml.md)
 
   
 
