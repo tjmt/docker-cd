@@ -4,7 +4,7 @@ Responsável por conter as configurações (variáveis de ambiente, labels, etc)
 
 Exemplos:
 
-- [docker-compose.alpha.yml](../docker-compose.alpha.yml)
-- [docker-compose.beta.yml](../docker-compose.beta.yml)
-- [docker-compose.rc.yml](../docker-compose.rc.yml)
-- [docker-compose.stable.yml](../docker-compose.stable.yml)
+- [docker-compose.env-alpha.yml](../docker-compose.env-alpha.yml)
+- [docker-compose.env-beta.yml](../docker-compose.env-beta.yml)
+- [docker-compose.env-rc.yml](../docker-compose.env-rc.yml)
+- [docker-compose.env-stable.yml](../docker-compose.env-stable.yml)
