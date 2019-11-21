@@ -2,8 +2,8 @@ version: '3.6'
 
 services:
   app-front-end:
-    image: ${DOCKER_REGISTRY}dsa/sistema.tjmt.jus.br:${BRANCH:-develop}.${VERSION:-local}
-    container_name: sistema.tjmt.jus.br-local
+    image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH:-develop}.${VERSION:-local}
+    container_name: sistema.cnj.jus.br-local
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,7 +11,7 @@ services:
         BASE_HREF: /
 
   app-back-end:
-    image: ${DOCKER_REGISTRY}dsa/sistema-api.tjmt.jus.br:${BRANCH:-develop}.${VERSION:-local}
+    image: ${DOCKER_REGISTRY}dsa/sistema-api.cnj.jus.br:${BRANCH:-develop}.${VERSION:-local}
     build:
       context: .
       dockerfile: src/PJMT.Aurora.API/Dockerfile
