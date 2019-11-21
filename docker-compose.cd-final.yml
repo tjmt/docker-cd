@@ -2,6 +2,6 @@ version: '3.6'
 
 services:
   app-front-end:
-    image: ${DOCKER_REGISTRY}dsa/sistema.tjmt.jus.br:${BRANCH}.${VERSION}
+    image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH}.${VERSION}
     build:
       target: runtime
