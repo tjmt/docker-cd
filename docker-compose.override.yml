@@ -1,7 +1,7 @@
 version: '3.6'
 
 services:
-  app-front-end:
+  sistema-cnj-jus-br:
     build:
       target: build
     ports:
@@ -9,16 +9,6 @@ services:
     environment:
       RUN_TEST: ${RUN_TEST:-false}
       RUN_PROJECT: ${RUN_PROJECT:-true}
-      AUTH_APP_URL: 'http://localhost:4200'
       AUTH_AUTHORITY: 'http://localhost:8080/auth/realms/master/'
       AUTH_CLIENT_ID: 'http://localhost:4200'
       AUTH_SCOPE: 'openid profile email roles offline_access'
-
-  app-back-end:
-    environment:
-      ASPNETCORE_ENVIRONMENT: LOCAL
-      ASPNETCORE_URLS: 'https://+:443;http://+:80'
-      ASPNETCORE_HTTPS_PORT: '5556'
-    ports:
-      - "5555:80"
-      - "5556:443"  
