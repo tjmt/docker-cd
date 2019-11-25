@@ -3,7 +3,6 @@ version: '3.5'
 services:  
   sistema-cnj-jus-br:
     image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH:-develop}.${VERSION:-local}-build
-    container_name: sistema.cnj.jus.br-release
     environment:
       #----Nuget----
       DEPLOY_NUGET: ${DEPLOY_NUGET:-false} #Indica se irá rodar o script que publica pacotes Nuget (nuget push)
@@ -36,7 +35,3 @@ services:
       DOCKER_REGISTRY: ${DOCKER_REGISTRY}
       VERSION: ${VERSION}
       BRANCH: ${BRANCH}
-
-networks:
-  default:
-    name: ns-sistema-${BRANCH}-${VERSION}-release
