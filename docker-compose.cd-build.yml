@@ -4,7 +4,7 @@ services:
   sistema-cnj-jus-br:
     image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH}.${VERSION}-build
     build:
-      target: release
+      target: build
       args:
         VERSION: ${VERSION}
         BRANCH: ${BRANCH}
