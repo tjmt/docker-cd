@@ -4,7 +4,7 @@
 * Deve passar os argumentos para geração dos artefatos do projeto (pacotes/ arquivos runtime)
 
 Pré requisitos:
-- tag: `${BRANCH}.${VERSION}-publish`
+- tag: `${BRANCH}.${VERSION}-build`
 - target: `release`
 - args:
     - `VERSION`: Versão da imagem
@@ -15,4 +15,4 @@ Pré requisitos:
         - Nomear usando variavel de ambiente: `${DOCKERCOMPOSE_PUBLISH_VOLUME_NAME}`    
 
 Exemplo:
-- [docker-compose.cd-publish.yml](../docker-compose.cd-publish.yml)
+- [docker-compose.cd-build.yml](../docker-compose.cd-build.yml)
