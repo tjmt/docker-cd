@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   sistema-cnj-jus-br:
-    image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH}.${VERSION}-publish
+    image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH}.${VERSION}-build
     build:
       target: release
       args:
