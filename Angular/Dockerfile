@@ -12,7 +12,7 @@ EXPOSE 4200
 
 
 #---------------Estágio usada para build/publish/pack
-FROM ci as publish
+FROM ci as build
 WORKDIR /app
 RUN npm run build -- --aot=true --build-optimizer=true --optimization=true --prod --configuration=production --base-href=/ --output-path=www
 RUN npm pack
@@ -20,7 +20,7 @@ RUN mkdir -p /app/package && mv *.tgz /app/package
 
 #---------------Estágio usada para runtime
 FROM tjmt/angular:nginx-1.17.4 AS runtime
-COPY --from=publish /app/www/ /usr/share/nginx/html/
+COPY --from=build /app/www/ /usr/share/nginx/html/
 
 
 #---------------Estágio usada para publicação (kubernetes/npm)
@@ -31,8 +31,8 @@ ENV VERSION=${VERSION}
 ENV BRANCH=${BRANCH}
 
 COPY . /var/release/source
-COPY --from=publish /app/www/ /var/release/www
-COPY --from=publish /app/package /var/release/packages/npm
+COPY --from=build /app/www/ /var/release/www
+COPY --from=build /app/package /var/release/packages/npm
 
 
 FROM runtime AS final
