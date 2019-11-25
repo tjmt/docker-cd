@@ -9,4 +9,4 @@ Pré requisitos:
   - Caso for utilizar o kompose, a versão do `docker-compose` deve ser `3.5`
 
 Exemplo:
-- [docker-compose.cd-final.yml](../docker-compose.cd-final.yml)
+- [docker-compose.cd-runtime.yml](../docker-compose.cd-runtime.yml)
