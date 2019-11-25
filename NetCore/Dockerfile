@@ -31,7 +31,7 @@ ENTRYPOINT /entrypoint/entrypoint.sh
 
 
 #---------------Estágio usada para build/publish/pack
-FROM ci as publish
+FROM ci as build
 RUN dotnet build ${SOLUTION_NAME} -c ${CONFIGURATION} -v m
 RUN dotnet publish src/PJMT.Aurora.API -c ${CONFIGURATION} --no-build -o /app/www -v m
 
@@ -41,7 +41,7 @@ RUN dotnet publish src/PJMT.Aurora.API -c ${CONFIGURATION} --no-build -o /app/ww
 
 #---------------Estágio usada para runtime
 FROM tjmt/dotnetcore:aspnet-2.2 as runtime
-COPY --from=publish /app/www /app/www
+COPY --from=build /app/www /app/www
 WORKDIR /app/www
 ENTRYPOINT dotnet PJMT.Aurora.API.dll
 
@@ -54,9 +54,9 @@ ENV VERSION=${VERSION}
 ENV BRANCH=${BRANCH}
 
 COPY . /var/release/source
-COPY --from=publish /app/www/ /var/release/www
+COPY --from=build /app/www/ /var/release/www
 #Caso use pacote nuget, descomentar linha abaixo
-#COPY --from=publish /app/package /var/release/packages/nuget
+#COPY --from=build /app/package /var/release/packages/nuget
 
 
 FROM runtime AS final
