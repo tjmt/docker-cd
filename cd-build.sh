@@ -18,8 +18,8 @@ echo "-----------------------------------------------------------------------"
 #echo ""
 #echo "-----------------------------------------------------------------------"
 # docker-compose -f "docker-compose.yml" -f "docker-compose.cd-ci.yml" down -v --rmi all --remove-orphans
-# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-publish.yml" down -v --rmi all --remove-orphans
-# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-final.yml" down -v --rmi all --remove-orphans
+# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-build.yml" down -v --rmi all --remove-orphans
+# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-runtime.yml" down -v --rmi all --remove-orphans
 #echo "-----------------------------------------------------------------------"
 
 
@@ -53,13 +53,13 @@ echo "-----------------------------------------------------------------------"
 
 echo ""
 echo "-----------------------------------------------------------------------"
-echo "Run docker-compose.cd-publish.yml"
+echo "Run docker-compose.cd-build.yml"
 export DOCKERCOMPOSE_PUBLISH_VOLUME_NAME="app-extract-publish"
 export DOCKERCOMPOSE_PUBLISH_CONTAINER_NAME="container-publish"
 export DOCKERCOMPOSE_PUBLISH_APP_PATH="/var/release/"
 
-docker-compose -f "docker-compose.yml" -f "docker-compose.cd-publish.yml" up --build --abort-on-container-exit && \
-#docker-compose -f "docker-compose.yml" -f "docker-compose.cd-publish.yml" push && \
+docker-compose -f "docker-compose.yml" -f "docker-compose.cd-build.yml" up --build --abort-on-container-exit && \
+#docker-compose -f "docker-compose.yml" -f "docker-compose.cd-build.yml" push && \
 echo "Extraindo o artefatos" && \
 docker create --name $DOCKERCOMPOSE_PUBLISH_CONTAINER_NAME -v $DOCKERCOMPOSE_PUBLISH_VOLUME_NAME:$DOCKERCOMPOSE_PUBLISH_APP_PATH busybox && \
 docker cp $DOCKERCOMPOSE_PUBLISH_CONTAINER_NAME:$DOCKERCOMPOSE_PUBLISH_APP_PATH $ARTIFACT_STAGING_DIRECTORY/artefatos && \
@@ -69,7 +69,7 @@ echo "-----------------------------------------------------------------------"
 
 echo ""
 echo "-----------------------------------------------------------------------"
-echo "Run docker-compose.cd-final.yml"
-docker-compose -f "docker-compose.yml" -f "docker-compose.cd-final.yml" build
-#docker-compose -f "docker-compose.yml" -f "docker-compose.cd-final.yml" push
+echo "Run docker-compose.cd-runtime.yml"
+docker-compose -f "docker-compose.yml" -f "docker-compose.cd-runtime.yml" build
+#docker-compose -f "docker-compose.yml" -f "docker-compose.cd-runtime.yml" push
 echo "-----------------------------------------------------------------------"
