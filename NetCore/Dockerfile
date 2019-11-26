@@ -47,7 +47,7 @@ ENTRYPOINT dotnet PJMT.Aurora.API.dll
 
 
 #---------------Estágio usada para publicação (kubernetes/nuget)
-FROM tjmt/publicador:latest as release
+FROM tjmt/publicador:latest as deploy
 ARG VERSION
 ARG BRANCH
 ENV VERSION=${VERSION}
