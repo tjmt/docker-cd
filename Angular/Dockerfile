@@ -2,8 +2,8 @@
 FROM tjmt/angular:node-10 as base
 
 
-#---------------Estágio usada para rodar o CI, teste, sonarqube
-FROM base as ci
+#---------------Estágio usada para rodar os Testes, teste, sonarqube
+FROM base as tests
 WORKDIR /app
 COPY package.json package-lock.json .npmrc ./
 RUN npm ci
@@ -12,7 +12,7 @@ EXPOSE 4200
 
 
 #---------------Estágio usada para build/publish/pack
-FROM ci as build
+FROM tests as build
 WORKDIR /app
 RUN npm run build -- --aot=true --build-optimizer=true --optimization=true --prod --configuration=production --base-href=/ --output-path=www
 RUN npm pack
@@ -24,7 +24,7 @@ COPY --from=build /app/www/ /usr/share/nginx/html/
 
 
 #---------------Estágio usada para publicação (kubernetes/npm)
-FROM tjmt/publicador:latest as release
+FROM tjmt/publicador:latest as deploy
 ARG VERSION
 ARG BRANCH
 ENV VERSION=${VERSION}
