@@ -57,9 +57,9 @@ O repositório GIT deve conter os seguintes arquivos em sua raiz:
 - [`docker-compose.override.yml`](./docs/docker-compose.override.yml.md)
 - CD/CI
     - [`docker-compose.cd-build.yml`](./docs/docker-compose.cd-build.yml.md)
-    - [`docker-compose.cd-ci.yml`](./docs/docker-compose.cd-ci.yml.md)
+    - [`docker-compose.cd-tests.yml`](./docs/docker-compose.cd-tests.yml.md)
     - [`docker-compose.cd-runtime.yml`](./docs/docker-compose.cd-runtime.yml.md)
-    - [`docker-compose.cd-release.yml`](./docs/docker-compose.cd-release.yml.md)
+    - [`docker-compose.cd-deploy.yml`](./docs/docker-compose.cd-deploy.yml.md)
 - Ambientes
     - [`docker-compose.env-{environment}.yml`](./docs/docker-compose.env-environment.yml.md)
 
