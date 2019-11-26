@@ -37,4 +37,4 @@ Pré requisitos:
 
 
 Exemplo:
-- [docker-compose.cd-release.yml](../docker-compose.cd-release.yml)
+- [docker-compose.cd-deploy.yml](../docker-compose.cd-deploy.yml)
