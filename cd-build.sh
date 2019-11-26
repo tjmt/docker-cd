@@ -17,7 +17,7 @@ echo "-----------------------------------------------------------------------"
 #Para remover todas as images intermediarias, volume, e outras dependencias, rodar os comandos abaixo
 #echo ""
 #echo "-----------------------------------------------------------------------"
-# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-ci.yml" down -v --rmi all --remove-orphans
+# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-tests.yml" down -v --rmi all --remove-orphans
 # docker-compose -f "docker-compose.yml" -f "docker-compose.cd-build.yml" down -v --rmi all --remove-orphans
 # docker-compose -f "docker-compose.yml" -f "docker-compose.cd-runtime.yml" down -v --rmi all --remove-orphans
 #echo "-----------------------------------------------------------------------"
@@ -40,9 +40,9 @@ export CONFIGURATION="Debug"
 
 
 echo "-----------------------------------------------------------------------"
-echo "Run docker-compose.cd-ci.yml"
-docker-compose -f "docker-compose.yml" -f "docker-compose.cd-ci.yml" up --build --abort-on-container-exit && \
-#docker-compose -f "docker-compose.yml" -f "docker-compose.cd-ci.yml" push && \
+echo "Run docker-compose.cd-tests.yml"
+docker-compose -f "docker-compose.yml" -f "docker-compose.cd-tests.yml" up --build --abort-on-container-exit && \
+#docker-compose -f "docker-compose.yml" -f "docker-compose.cd-tests.yml" push && \
 echo "Extraindo os resultados dos testes" && \
 docker create --name $DOCKERCOMPOSE_BUILD_CONTAINER_NAME -v $DOCKERCOMPOSE_BUILD_VOLUME_NAME:$DOCKERCOMPOSE_BUILD_TEST_RESULT_PATH busybox && \
 docker cp $DOCKERCOMPOSE_BUILD_CONTAINER_NAME:$DOCKERCOMPOSE_BUILD_TEST_RESULT_PATH $ARTIFACT_STAGING_DIRECTORY/TestResults && \
