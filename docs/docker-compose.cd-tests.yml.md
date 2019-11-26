@@ -3,7 +3,7 @@
 > Responsável por conter os argumentos e serviços necessários para executar os testes de integração que necessitam de um ambiente completo para execução dos testes. (Exemplo: banco de dados, API)
 
 Pré requisitos:
-- tag: `${BRANCH}.${VERSION}-ci`
+- tag: `${BRANCH}.${VERSION}-tests`
 - target: `ci`
 - volume
     - Criar um volume mapeando para a pasta com os resultados dos testes
@@ -20,8 +20,8 @@ version: '3.6'
 
 services:
   app-front-end:
-    image: ${DOCKER_REGISTRY}dsa/sistema.tjmt.jus.br:${BRANCH:-develop}.${VERSION:-local}-ci
-    container_name: sistema-${BRANCH:-develop}.tjmt.jus.br-ci
+    image: ${DOCKER_REGISTRY}dsa/sistema.tjmt.jus.br:${BRANCH:-develop}.${VERSION:-local}-tests
+    container_name: sistema-${BRANCH:-develop}.tjmt.jus.br-tests
     build:
       target: ci
     environment:
@@ -37,7 +37,7 @@ services:
 
 networks:
   default:
-    name: ns-sistema-${BRANCH:-develop}-${VERSION:-local}-ci
+    name: ns-sistema-${BRANCH:-develop}-${VERSION:-local}-tests
 
 volumes:
   test-result:
@@ -54,8 +54,8 @@ version: '3.6'
 
 services:
   app-back-end:
-    image: ${DOCKER_REGISTRY}dsa/sistema-api.tjmt.jus.br:${BRANCH:-develop}.${VERSION:-local}-ci
-    container_name: sistema-api-${BRANCH:-develop}.tjmt.jus.br-ci
+    image: ${DOCKER_REGISTRY}dsa/sistema-api.tjmt.jus.br:${BRANCH:-develop}.${VERSION:-local}-tests
+    container_name: sistema-api-${BRANCH:-develop}.tjmt.jus.br-tests
     build:
       target: ci
     entrypoint: ["/entrypoint/wait-for-it.sh", "sistema-mssql:1433", "--", "/entrypoint/entrypoint.sh"]
@@ -84,7 +84,7 @@ services:
 
 networks:
   default:
-    name: ns-sistema-api-${BRANCH:-develop}-${VERSION:-local}-ci
+    name: ns-sistema-api-${BRANCH:-develop}-${VERSION:-local}-tests
 
 volumes:
   test-result:
