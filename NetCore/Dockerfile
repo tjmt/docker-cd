@@ -2,8 +2,8 @@
 FROM tjmt/dotnetcore/sdk:2.2.202 as base
 
 
-#---------------Estágio usada para rodar o CI (restore, teste, sonarqube)
-FROM base as ci
+#---------------Estágio usada para rodar os Testes (restore, teste, sonarqube)
+FROM base as tests
 ARG CONFIGURATION=Release
 ENV CONFIGURATION=$CONFIGURATION
 ENV SOLUTION_NAME=Portais-API-DotNet-Seed.sln
@@ -31,7 +31,7 @@ ENTRYPOINT /entrypoint/entrypoint.sh
 
 
 #---------------Estágio usada para build/publish/pack
-FROM ci as build
+FROM tests as build
 RUN dotnet build ${SOLUTION_NAME} -c ${CONFIGURATION} -v m
 RUN dotnet publish src/PJMT.Aurora.API -c ${CONFIGURATION} --no-build -o /app/www -v m
 
