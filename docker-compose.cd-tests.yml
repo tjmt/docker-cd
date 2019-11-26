@@ -2,8 +2,8 @@ version: '3.5'
 
 services:
   sistema-cnj-jus-br:
-    image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH:-develop}.${VERSION:-local}-ci
-    container_name: sistema-ci.cnj.jus.br
+    image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH:-develop}.${VERSION:-local}-tests
+    container_name: sistema-tests.cnj.jus.br
     build:
       target: ci
     environment:
@@ -23,4 +23,4 @@ volumes:
 
 networks:
   default:
-    name: ns-sistema-${BRANCH}-${VERSION}-ci    
+    name: ns-sistema-${BRANCH}-${VERSION}-tests    
