@@ -73,3 +73,11 @@ echo "Run docker-compose.cd-runtime.yml"
 docker-compose -f "docker-compose.yml" -f "docker-compose.cd-runtime.yml" build
 #docker-compose -f "docker-compose.yml" -f "docker-compose.cd-runtime.yml" push
 echo "-----------------------------------------------------------------------"
+
+
+echo ""
+echo "-----------------------------------------------------------------------"
+echo "Run docker-compose.cd-deploy.yml"
+docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy.yml" build
+#docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy.yml" push
+echo "-----------------------------------------------------------------------"
