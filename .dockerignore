@@ -9,3 +9,7 @@ TestResults
 bin/
 obj/
 target/
+**/docker-compose*
+!docker-compose.dcproj
+!docker-compose.cd-deploy.yml
+!docker-compose.env*

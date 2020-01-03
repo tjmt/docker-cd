@@ -4,11 +4,9 @@ services:
   sistema-cnj-jus-br:
     build:
       target: build
-    ports:
-      - 4200:4200
     environment:
-      RUN_TEST: ${RUN_TEST:-false}
-      RUN_PROJECT: ${RUN_PROJECT:-true}
       AUTH_AUTHORITY: 'http://localhost:8080/auth/realms/master/'
       AUTH_CLIENT_ID: 'http://localhost:4200'
       AUTH_SCOPE: 'openid profile email roles offline_access'
+    ports:
+      - 4200:4200

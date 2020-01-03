@@ -1,83 +1,80 @@
+# BUILD
 clear
 rm -rf ./docker-extract/
 mkdir ./docker-extract/
 
-#Essas variaveis precisam estar na release também
+# Variáveis de configuração geral
 export DOCKER_REGISTRY=""
 export VERSION=$(date '+%Y%m%d')-1
 export BRANCH="develop"
 
+# Variáveis utilizadas nos testes
+export RUN_TEST="true"
+export RUN_SONARQUBE="true"
+export SONARQUBE_URL="http://localhost:9000"
+export SONARQUBE_LOGIN=""
+
+# Variáveis utilizadas para extrair os artefatos de container
+export ARTIFACT_STAGING_DIRECTORY="./docker-extract"
 
 echo "-----------------------------------------------------------------------"
-echo "Iniciando cd-build.sh."
+echo "Iniciando cd-BUILD.sh."
 echo "ImageName: ${DOCKER_REGISTRY}/app:${BRANCH}.${VERSION}"
 echo "-----------------------------------------------------------------------"
 
+if [[ $RUN_TEST == 'true' ]]; then
+    echo ""
+    echo "-----------------------------------------------------------------------"
+    echo "Run docker-compose.cd-tests.yml"
+    docker-compose -f "docker-compose.yml" -f "docker-compose.cd-tests.yml" up --build --force-recreate --abort-on-container-exit
+    echo "-----------------------------------------------------------------------"
 
-#Para remover todas as images intermediarias, volume, e outras dependencias, rodar os comandos abaixo
-#echo ""
-#echo "-----------------------------------------------------------------------"
-# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-tests.yml" down -v --rmi all --remove-orphans
-# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-build.yml" down -v --rmi all --remove-orphans
-# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-runtime.yml" down -v --rmi all --remove-orphans
-#echo "-----------------------------------------------------------------------"
+    echo ""
+    echo "-----------------------------------------------------------------------"
+    echo "Extraindo os artefatos de teste"
+    docker cp tests-tjmt-jus-br:/TestResults ${ARTIFACT_STAGING_DIRECTORY}/TestResults
+    echo "-----------------------------------------------------------------------"
+fi
 
-
-
-#Variaveis locais, utilizado para copiar os arquivos do container
-ARTIFACT_STAGING_DIRECTORY="./docker-extract"
-DOCKERCOMPOSE_BUILD_VOLUME_NAME="app-extract-testresults"
-DOCKERCOMPOSE_BUILD_CONTAINER_NAME="container-testResults"
-DOCKERCOMPOSE_BUILD_TEST_RESULT_PATH="/TestResults"
-
-#Build
-export SONARQUBE_URL="http://localhost:9000"
-export SONARQUBE_LOGIN=""
-export RUN_TEST="true"
-export RUN_PROJECT="false"
-export RUN_SONARQUBE="true"
-export CONFIGURATION="Debug"
-
-
+echo ""
 echo "-----------------------------------------------------------------------"
-echo "Run docker-compose.cd-tests.yml"
-docker-compose -f "docker-compose.yml" -f "docker-compose.cd-tests.yml" up --build --abort-on-container-exit && \
-#docker-compose -f "docker-compose.yml" -f "docker-compose.cd-tests.yml" push && \
-echo "Extraindo os resultados dos testes" && \
-docker create --name $DOCKERCOMPOSE_BUILD_CONTAINER_NAME -v $DOCKERCOMPOSE_BUILD_VOLUME_NAME:$DOCKERCOMPOSE_BUILD_TEST_RESULT_PATH busybox && \
-docker cp $DOCKERCOMPOSE_BUILD_CONTAINER_NAME:$DOCKERCOMPOSE_BUILD_TEST_RESULT_PATH $ARTIFACT_STAGING_DIRECTORY/TestResults && \
-docker rm $DOCKERCOMPOSE_BUILD_CONTAINER_NAME
+echo "Run docker-compose.cd-debug.yml"
+docker-compose -f "docker-compose.yml" -f "docker-compose.cd-debug.yml" build
+docker-compose -f "docker-compose.yml" -f "docker-compose.cd-debug.yml" push
 echo "-----------------------------------------------------------------------"
-
-
 
 echo ""
 echo "-----------------------------------------------------------------------"
 echo "Run docker-compose.cd-build.yml"
-export DOCKERCOMPOSE_PUBLISH_VOLUME_NAME="app-extract-publish"
-export DOCKERCOMPOSE_PUBLISH_CONTAINER_NAME="container-publish"
-export DOCKERCOMPOSE_PUBLISH_APP_PATH="/var/release/"
-
-docker-compose -f "docker-compose.yml" -f "docker-compose.cd-build.yml" up --build --abort-on-container-exit && \
-#docker-compose -f "docker-compose.yml" -f "docker-compose.cd-build.yml" push && \
-echo "Extraindo o artefatos" && \
-docker create --name $DOCKERCOMPOSE_PUBLISH_CONTAINER_NAME -v $DOCKERCOMPOSE_PUBLISH_VOLUME_NAME:$DOCKERCOMPOSE_PUBLISH_APP_PATH busybox && \
-docker cp $DOCKERCOMPOSE_PUBLISH_CONTAINER_NAME:$DOCKERCOMPOSE_PUBLISH_APP_PATH $ARTIFACT_STAGING_DIRECTORY/artefatos && \
-docker rm $DOCKERCOMPOSE_PUBLISH_CONTAINER_NAME
+docker-compose -f "docker-compose.yml" -f "docker-compose.cd-build.yml" up --build --force-recreate --no-start
 echo "-----------------------------------------------------------------------"
 
+echo ""
+echo "-----------------------------------------------------------------------"
+echo "Extraindo os artefatos de build"
+docker cp build-tjmt-jus-br:/app ${ARTIFACT_STAGING_DIRECTORY}/BuildArtifacts
+echo "-----------------------------------------------------------------------"
 
 echo ""
 echo "-----------------------------------------------------------------------"
 echo "Run docker-compose.cd-runtime.yml"
 docker-compose -f "docker-compose.yml" -f "docker-compose.cd-runtime.yml" build
-#docker-compose -f "docker-compose.yml" -f "docker-compose.cd-runtime.yml" push
+docker-compose -f "docker-compose.yml" -f "docker-compose.cd-runtime.yml" push
 echo "-----------------------------------------------------------------------"
 
+# echo ""
+# echo "-----------------------------------------------------------------------"
+# echo "Run docker-compose.cd-deploy.yml"
+# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy.yml" build && \
+# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy.yml" push
+# echo "-----------------------------------------------------------------------"
 
 echo ""
 echo "-----------------------------------------------------------------------"
-echo "Run docker-compose.cd-deploy.yml"
-docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy.yml" build
-#docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy.yml" push
+echo "Remoção de todas as imagens de build juntamente com os seus respectivos volumes e imagens intermediárias"
+docker-compose -f "docker-compose.yml" -f "docker-compose.cd-tests.yml" down -v --rmi all --remove-orphans 
+docker-compose -f "docker-compose.yml" -f "docker-compose.cd-debug.yml" down -v --rmi all --remove-orphans
+docker-compose -f "docker-compose.yml" -f "docker-compose.cd-build.yml" down -v --rmi all --remove-orphans
+docker-compose -f "docker-compose.yml" -f "docker-compose.cd-runtime.yml" down -v --rmi all --remove-orphans
+# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy.yml" down -v --rmi all --remove-orphans
 echo "-----------------------------------------------------------------------"

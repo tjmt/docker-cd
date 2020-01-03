@@ -1,16 +1,8 @@
-version: '3.5'
+version: "3.6"
 
 services:
   sistema-cnj-jus-br:
     image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH}.${VERSION}-build
+    container_name: build-tjmt-jus-br
     build:
       target: build
-      args:
-        VERSION: ${VERSION}
-        BRANCH: ${BRANCH}
-    volumes:
-      - app:/var/release/
-
-volumes:
-  app:
-    name: ${DOCKERCOMPOSE_PUBLISH_VOLUME_NAME:-app-extract-app}

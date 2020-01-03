@@ -1,26 +1,14 @@
-version: '3.5'
+version: "3.6"
 
 services:
   sistema-cnj-jus-br:
-    image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH:-develop}.${VERSION:-local}-tests
-    container_name: sistema-tests.cnj.jus.br
+    image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH}.${VERSION:-local}-tests
+    container_name: tests-tjmt-jus-br
     build:
       target: tests
     environment:
-      RUN_TEST: ${RUN_TEST:-true}
-      RUN_PROJECT: ${RUN_PROJECT:-false}
-      RUN_SONARQUBE: ${RUN_SONARQUBE:-true}
+      RUN_SONARQUBE: ${RUN_SONARQUBE:-false}
       SONARQUBE_URL: ${SONARQUBE_URL:-http://172.17.0.1:9000}
       SONARQUBE_LOGIN: ${SONARQUBE_LOGIN}
       SONARQUBE_PROJECT: sistema.cnj.jus.br
       SONARQUBE_PROJECT_VERSION: ${VERSION:-local}
-    volumes:
-      - test-result:/TestResults
-
-volumes:
-  test-result:
-    name: ${DOCKERCOMPOSE_CI_VOLUME_NAME:-app-test-results}
-
-networks:
-  default:
-    name: ns-sistema-${BRANCH}-${VERSION}-tests    

@@ -5,8 +5,8 @@
 
 Pré requisitos:
 - image: 
-  - Utilizar imagem gerada pelo `docker-compose.cd-publish.yml`
-- environment: (Informar as variaveis necessárias para deploy da aplicação)
+  - Utilizar imagem gerada pelo `docker-compose.cd-runtime.yml`
+- environment: (Informar as variáveis necessárias para deploy da aplicação)
   - NUGET
     - DEPLOY_NUGET (*default:* `false`)
     - NUGET_REGISTRY
@@ -33,8 +33,9 @@ Pré requisitos:
     - KUBECONFIG_PATH (*default:* `${KUBERNETES_FOLDER}kubeconfig`)
     - COMPOSE_PATH _Informar o arquivos docker-compose.yml caso queria usar o kompose para converter para yaml_
     - DEPLOY_KUBERNETES (*default:* `false`) _Realiza `kubectl apply` nos arquivos *.yaml presentes na pasta informado pela variavel `$(KUBERNETES_FOLDER)`_
-    - DESTROY_KUBERNETES_ENVIRONMENT (*default:* `false`) _Realiza `kubectl delete` nos arquivos *.yaml presentes na pasta informado pela variavel `$(KUBERNETES_FOLDER)`_
-
+    - DESTROY_KUBERNETES_ENVIRONMENT (*default:* `false`) _Realiza `kubectl delete` nos arquivos *.yaml presentes na pasta informado pela variável `$(KUBERNETES_FOLDER)`_
+- volumes:
+  - COMPOSE_RELEASE_PATH _Informar o caminho dos artefatos de build_
 
 Exemplo:
 - [docker-compose.cd-deploy.yml](../docker-compose.cd-deploy.yml)

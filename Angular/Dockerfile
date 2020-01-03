@@ -1,38 +1,47 @@
-#---------------Imagem usada para Instalação de ferramentas/bibliotecas adicionais
-FROM tjmt/angular:node-10 as base
+#---------------Estágio usado para rodar apenas em ambiente de desenvolvimento com propósito de realizar depuração de código
+FROM tjmt/angular:node-10 as debug
 
-
-#---------------Estágio usada para rodar os Testes, teste, sonarqube
-FROM base as tests
 WORKDIR /app
 COPY package.json package-lock.json .npmrc ./
 RUN npm ci
 COPY . ./
 EXPOSE 4200
 
+RUN chmod +x ./entrypoint-debug.sh
+ENTRYPOINT ./entrypoint-debug.sh
+
+#---------------Estágio usado para rodar os Testes (teste unitário, teste de integração, sonarqube)
+FROM debug as tests
+
+RUN chmod +x ./entrypoint-tests.sh
+ENTRYPOINT ./entrypoint-tests.sh
 
 #---------------Estágio usada para build/publish/pack
-FROM tests as build
-WORKDIR /app
-RUN npm run build -- --aot=true --build-optimizer=true --optimization=true --prod --configuration=production --base-href=/ --output-path=www
-RUN npm pack
-RUN mkdir -p /app/package && mv *.tgz /app/package
+FROM debug as build
 
-#---------------Estágio usada para runtime
+RUN npm run build -- --aot=true --build-optimizer=true --optimization=true --prod --configuration=production --base-href=/ --output-path=www
+
+# Caso use pacote npm, descomentar abaixo
+# RUN npm pack
+# RUN mkdir -p /app/package && mv *.tgz /app/package
+
+#---------------Estágio usado para runtime
 FROM tjmt/angular:nginx-1.17.4 AS runtime
+
 COPY --from=build /app/www/ /usr/share/nginx/html/
 
+RUN chmod +x ./entrypoint.sh
+ENTRYPOINT ./entrypoint.sh
 
-#---------------Estágio usada para publicação (kubernetes/npm)
-FROM tjmt/publicador:latest as deploy
-ARG VERSION
-ARG BRANCH
-ENV VERSION=${VERSION}
-ENV BRANCH=${BRANCH}
+# Utilize o espaço abaixo apenas se você precisar realizar uma publicação customizada de sua aplicação
 
-COPY . /var/release/source
-COPY --from=build /app/www/ /var/release/www
-COPY --from=build /app/package /var/release/packages/npm
+# #---------------Estágio usada para publicação (kubernetes/nuget)
+# FROM tjmt/publicador:latest as deploy
 
+# COPY docker-compose.env* /var/release/source/
+# COPY --from=build /app/www/ /var/release/www
 
-FROM runtime AS final
+# # Caso use pacote npm, descomentar linha abaixo
+# # COPY --from=build /app/package /var/release/packages/npm
+
+# FROM runtime AS final

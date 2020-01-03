@@ -1,15 +1,16 @@
 #!/bin/bash
 
-echo "Iniciando entrypoint - RUNTIME"
+echo "Iniciando entrypoint - DEBUG"
 
 echo "--- Variáveis de ambiente ---"
 printenv | sort
 echo "-----------------------------"
 
-envsubst < "/usr/share/nginx/html/assets/config/config-docker.json" > "/usr/share/nginx/html/assets/config/config.json"
+configPath="/app/src/assets/config"
+envsubst < "${configPath}/config-docker.json" > "${configPath}/config.json"
 
 echo "--- Configurações das variáveis de ambiente utilizadas ---"
-cat /usr/share/nginx/html/assets/config/config.json
+cat ${configPath}/config.json
 echo "----------------------------------------------------------"
 
-nginx -g "daemon off;"
+npm run start || true;

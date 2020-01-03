@@ -1,62 +1,64 @@
-#---------------Estágio usada para Instalação de ferramentas/bibliotecas adicionais
-FROM tjmt/dotnetcore/sdk:2.2.202 as base
+# ARG DOCKER_REGISTRY=${DOCKER_REGISTRY}
 
+#---------------Estágio usado para rodar apenas em ambiente de desenvolvimento com propósito de realizar depuração de código
+FROM tjmt/dotnetcore/sdk:3.0.100 as debug
 
-#---------------Estágio usada para rodar os Testes (restore, teste, sonarqube)
-FROM base as tests
-ARG CONFIGURATION=Release
-ENV CONFIGURATION=$CONFIGURATION
 ENV SOLUTION_NAME=Portais-API-DotNet-Seed.sln
-
+ENV PROJECT_NAME=PJMT.Aurora.API
 
 WORKDIR /src
-#====================================================================#
-# Se utilizar o copy informando o path dos projetos, será utilizado cache do RESTORE, porém para cada projeto criado, tem que ser adicionado no copy
-# Um caso ou outro devido issue https://github.com/moby/moby/issues/15858
-COPY ["docker-compose.dcproj", "docker-compose.dcproj"]
-COPY ["Portais-API-DotNet-Seed.sln", "Portais-API-DotNet-Seed.sln"]
-COPY ["src/PJMT.Aurora.API/PJMT.Aurora.API.csproj", "src/PJMT.Aurora.API/"]
-COPY ["src/PJMT.Aurora.Infra.Application/PJMT.Aurora.Infra.Application.csproj", "src/PJMT.Aurora.Infra.Application/"]
-COPY ["src/PJMT.Aurora.Infra.CrossCutting.Identity/PJMT.Aurora.Infra.CrossCutting.Identity.csproj", "src/PJMT.Aurora.Infra.CrossCutting.Identity/"]
-COPY ["src/PJMT.Aurora.Domain/PJMT.Aurora.Domain.csproj", "src/PJMT.Aurora.Domain/"]
-COPY ["src/PJMT.Aurora.Infra.Data.EF.Repository/PJMT.Aurora.Infra.Data.EF.Repository.csproj", "src/PJMT.Aurora.Infra.Data.EF.Repository/"]
-COPY ["src/PJMT.Aurora.Infra.CrossCutting.IoC/PJMT.Aurora.Infra.CrossCutting.IoC.csproj", "src/PJMT.Aurora.Infra.CrossCutting.IoC/"]
-COPY ["src/PJMT.Aurora.Infra.Data.Dapper/PJMT.Aurora.Infra.Data.Dapper.csproj", "src/PJMT.Aurora.Infra.Data.Dapper/"]
-COPY ["src/PJMT.Aurora.Infra.Data.MongoDB/PJMT.Aurora.Infra.Data.MongoDB.csproj", "src/PJMT.Aurora.Infra.Data.MongoDB/"]
-COPY ["test/PJMT.Aurora.Test/PJMT.Aurora.Test.csproj", "test/PJMT.Aurora.Test/"]
+COPY ${SOLUTION_NAME} ./
+
+# Copia os arquivos principais do projeto
+COPY src/*/*.csproj *.dcproj ./
+RUN for file in $(ls *.csproj); do mkdir -p src/${file%.*}/ && mv $file src/${file%.*}/; done
+
+# Copia os arquivos de projeto de teste
+COPY test/*/*.csproj ./
+RUN for file in $(ls *.csproj); do mkdir -p test/${file%.*}/ && mv $file test/${file%.*}/; done
+
 RUN dotnet restore ${SOLUTION_NAME} -v m
+
 COPY . .
-ENTRYPOINT /entrypoint/entrypoint.sh
-#----------------------------------------------------------------------------------------------#
 
+ENTRYPOINT dotnet run -c Debug --no-launch-profile -p ./src/${PROJECT_NAME}
 
-#---------------Estágio usada para build/publish/pack
-FROM tests as build
-RUN dotnet build ${SOLUTION_NAME} -c ${CONFIGURATION} -v m
-RUN dotnet publish src/PJMT.Aurora.API -c ${CONFIGURATION} --no-build -o /app/www -v m
+#---------------Estágio usado para rodar os Testes (teste unitário, teste de integração, sonarqube)
+FROM debug as tests
 
-#Caso use pacote nuget, descomentar linha abaixo, e informar projeto correto
-#RUN dotnet src/PJMT.Aurora.API -c ${CONFIGURATION} --no-build -o /app/package -v m
- 
+RUN chmod +x ./entrypoint-tests.sh
+ENTRYPOINT ./entrypoint-tests.sh
 
-#---------------Estágio usada para runtime
-FROM tjmt/dotnetcore:aspnet-2.2 as runtime
+#---------------Estágio usado para build/publish/pack
+FROM debug as build
+
+COPY docker-compose.cd-deploy.yml docker-compose.env* /app/source/
+
+RUN dotnet build ${SOLUTION_NAME} -c Release -v m
+RUN dotnet publish src/${PROJECT_NAME} -c Release --no-build -o /app/www -v m
+
+# Caso use pacote nuget, descomentar linha abaixo, e informar projeto correto
+# RUN dotnet src/${PROJECT_NAME} -c Release --no-build -o /app/package -v m 
+
+#---------------Estágio usado para runtime
+FROM tjmt/dotnetcore:aspnet-3.0 as runtime
+
+ENV PROJECT_NAME=PJMT.Aurora.API
+
 COPY --from=build /app/www /app/www
 WORKDIR /app/www
-ENTRYPOINT dotnet PJMT.Aurora.API.dll
 
+ENTRYPOINT dotnet ${PROJECT_NAME}.dll
 
-#---------------Estágio usada para publicação (kubernetes/nuget)
-FROM tjmt/publicador:latest as deploy
-ARG VERSION
-ARG BRANCH
-ENV VERSION=${VERSION}
-ENV BRANCH=${BRANCH}
+# Utilize o espaço abaixo apenas se você precisar realizar uma publicação customizada de sua aplicação
 
-COPY . /var/release/source
-COPY --from=build /app/www/ /var/release/www
-#Caso use pacote nuget, descomentar linha abaixo
-#COPY --from=build /app/package /var/release/packages/nuget
+# #---------------Estágio usada para publicação (kubernetes/nuget)
+# FROM tjmt/publicador:latest as deploy
 
+# COPY docker-compose.env* /var/release/source/
+# COPY --from=build /app/www/ /var/release/www
 
-FROM runtime AS final
+# # Caso use pacote nuget, descomentar linha abaixo
+# # COPY --from=build /app/package /var/release/packages/nuget
+
+# FROM runtime AS final
