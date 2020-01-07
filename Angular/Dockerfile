@@ -1,11 +1,11 @@
 #---------------Estágio usado para rodar apenas em ambiente de desenvolvimento com propósito de realizar depuração de código
 FROM tjmt/angular:node-10 as debug
 
-WORKDIR /app
+WORKDIR /source
 COPY package.json package-lock.json .npmrc ./
 RUN npm ci
-COPY . ./
-EXPOSE 4200
+COPY docker-compose.cd-deploy.yml docker-compose.env* /app/source/
+COPY . .
 
 RUN chmod +x ./entrypoint-debug.sh
 ENTRYPOINT ./entrypoint-debug.sh
@@ -26,10 +26,12 @@ RUN npm run build -- --aot=true --build-optimizer=true --optimization=true --pro
 # RUN mkdir -p /app/package && mv *.tgz /app/package
 
 #---------------Estágio usado para runtime
-FROM tjmt/angular:nginx-1.17.4 AS runtime
+FROM tjmt/angular:nginx-1.17.5 AS runtime
 
-COPY --from=build /app/www/ /usr/share/nginx/html/
+COPY --from=build /source/entrypoint.sh /usr/share/nginx/html
+COPY --from=build /app/www /usr/share/nginx/html
 
+WORKDIR /usr/share/nginx/html
 RUN chmod +x ./entrypoint.sh
 ENTRYPOINT ./entrypoint.sh
 
