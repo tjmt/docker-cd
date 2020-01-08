@@ -4,7 +4,6 @@ FROM tjmt/angular:node-10 as debug
 WORKDIR /source
 COPY package.json package-lock.json .npmrc ./
 RUN npm ci
-COPY docker-compose.cd-deploy.yml docker-compose.env* /app/source/
 COPY . .
 
 RUN chmod +x ./entrypoint-debug.sh
@@ -19,7 +18,8 @@ ENTRYPOINT ./entrypoint-tests.sh
 #---------------Estágio usada para build/publish/pack
 FROM debug as build
 
-RUN npm run build -- --aot=true --build-optimizer=true --optimization=true --prod --configuration=production --base-href=/ --output-path=www
+COPY docker-compose.cd-deploy.yml docker-compose.env* /app/source/
+RUN npm run build -- --aot=true --build-optimizer=true --optimization=true --prod --configuration=production --base-href=/ --output-path=/app/www
 
 # Caso use pacote npm, descomentar abaixo
 # RUN npm pack
