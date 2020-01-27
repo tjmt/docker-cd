@@ -64,9 +64,9 @@ echo "-----------------------------------------------------------------------"
 
 # echo ""
 # echo "-----------------------------------------------------------------------"
-# echo "Run docker-compose.cd-deploy.yml"
-# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy.yml" build && \
-# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy.yml" push
+# echo "Run docker-compose.cd-deploy-build.yml"
+# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy-build.yml" build
+# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy-build.yml" push
 # echo "-----------------------------------------------------------------------"
 
 echo ""
@@ -76,5 +76,5 @@ docker-compose -f "docker-compose.yml" -f "docker-compose.cd-tests.yml" down -v 
 docker-compose -f "docker-compose.yml" -f "docker-compose.cd-debug.yml" down -v --rmi all --remove-orphans
 docker-compose -f "docker-compose.yml" -f "docker-compose.cd-build.yml" down -v --rmi all --remove-orphans
 docker-compose -f "docker-compose.yml" -f "docker-compose.cd-runtime.yml" down -v --rmi all --remove-orphans
-# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy.yml" down -v --rmi all --remove-orphans
+# docker-compose -f "docker-compose.yml" -f "docker-compose.cd-deploy-custom.yml" down -v --rmi all --remove-orphans
 echo "-----------------------------------------------------------------------"

@@ -1,7 +1,7 @@
 # Objetivo
 
 * Responsável pelo deploy dos artefatos.
-  * Aplicação no kubernetes e/ou no Registry das bibliotecas (npm/nuget/maven)
+  * Aplicação no Kubernetes e/ou no registry das bibliotecas (npm/nuget/maven)
 
 Pré requisitos:
 - image: 

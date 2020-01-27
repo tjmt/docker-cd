@@ -61,9 +61,10 @@ O repositório GIT deve conter os seguintes arquivos em sua raiz:
     - [`docker-compose.cd-build.yml`](./docs/docker-compose.cd-build.yml.md)
     - [`docker-compose.cd-runtime.yml`](./docs/docker-compose.cd-runtime.yml.md)
     - [`docker-compose.cd-deploy.yml`](./docs/docker-compose.cd-deploy.yml.md)
+
+    Por padrão, imagem `tjmt/publicador` contida no arquivo `docker-compose.cd-deploy.yml` já tem suporte para publicação de: pacotes Nuget, pacotes npm, pacotes Maven, Kubernetes com docker-compose ou Kubernetes puro. Caso queira personalizar a publicação ou utilizar outras fontes de destino, como FTP ou S3, descomente o stage `deploy` do Dockerfile e customize esta etapa seguindo o padrão abaixo:
+    - [`docker-compose.cd-deploy-build.yml`](./docs/docker-compose.cd-deploy-build.yml.md)
+    - [`docker-compose.cd-deploy-release.yml`](./docs/docker-compose.cd-deploy-release.yml.md)
+
 - Ambientes
     - [`docker-compose.env-{environment}.yml`](./docs/docker-compose.env-environment.yml.md)
-
-  
-
-

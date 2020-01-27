@@ -32,11 +32,9 @@
       - **runtime**
         - Estágio de runtime da aplicação
       - **deploy (opcional):** 
-        - Estágio de deploy dos arquivos.
-          - Pacotes nuget/npm/maven no registry
-          - Kubernetes
+        - Estágio de deploy dos artefatos gerados pelo processo de build. Por padrão esta etapa vem comentada no Dockerfile, porque o `tjmt/publicador` já cumpre o papel de realizar o deploy desses arquivos através do compartilhamento via volume Docker. Utilize este estágio caso necessite realizar uma publicação diferente de: pacotes Nuget, pacotes npm, pacotes Maven, Kubernetes com docker-compose ou Kubernetes puro.
       - **final (necessário apenas quando for utilizar o stage deploy):** 
-        - Estágio final (Pode ser o `runtime`)
+        - Estágio final (o mesmo do `runtime`)
     </details>
 * Deve salvar os resultados dos testes nos caminhos pré definidos (Estágio **CI**)
   * <details>
