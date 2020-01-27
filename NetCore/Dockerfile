@@ -32,7 +32,7 @@ ENTRYPOINT ./entrypoint-tests.sh
 #---------------Estágio usado para build/publish/pack
 FROM debug as build
 
-COPY docker-compose.cd-deploy.yml docker-compose.env* /app/source/
+COPY docker-compose.cd-deploy* docker-compose.env* /app/source/
 
 RUN dotnet build ${SOLUTION_NAME} -c Release -v m
 RUN dotnet publish src/${PROJECT_NAME} -c Release --no-build -o /app/www -v m
