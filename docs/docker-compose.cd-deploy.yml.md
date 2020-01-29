@@ -1,11 +1,10 @@
 # Objetivo
 
-* Responsável pelo deploy dos artefatos gerados no processo de build.
-  * Permite a publicação no Kubernetes ou nos registries para pacotes npm, Nuget ou Maven.
+> Responsável pelo deploy dos artefatos gerados no processo de build.
 
 ## Método convencional
 
-Neste fluxo, ele utiliza a imagem do `tjmt/publicador`, vinculando o caminho dos arquivos gerados no build para o container do publicador.
+Neste fluxo, ele utiliza a imagem do `tjmt/publicador`, vinculando o caminho dos arquivos gerados no build para o container do publicador. Essa imagem é apta para realizar publicação no Kubernetes ou nos registries para pacotes npm, Nuget ou Maven
 
 Pré requisitos:
 - image: 
