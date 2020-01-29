@@ -65,9 +65,6 @@ FROM tjmt/publicador:latest as deploy
 COPY docker-compose.env* /var/release/source/
 COPY --from=build /app/www/ /var/release/www
 
-# Caso use pacote nuget, descomentar linha abaixo
-COPY --from=build /app/package /var/release/packages/nuget
-
 FROM runtime AS final
 ```
 - [docker-compose.cd-deploy.yml](../docker-compose.cd-deploy-custom.yml)
