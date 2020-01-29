@@ -4,7 +4,7 @@ services:
   sistema-cnj-jus-br:
     image: sistema.cnj.jus.br:local
     build:
-      target: build
+      target: debug
     environment:
       AUTH_AUTHORITY: 'http://localhost:8080/auth/realms/master/'
       AUTH_CLIENT_ID: 'http://localhost:4200'
