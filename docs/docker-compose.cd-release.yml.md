@@ -49,7 +49,7 @@ Neste fluxo, ele cria uma imagem publicadora com o propósito de implantar/insta
 
 Pré requisitos:
 - image: 
-  - Utilizar a imagem gerada pelo [docker-compose.ci-deploy.yml](../docker-compose.ci-deploy.yml)
+  - Utilizar a imagem gerada pelo [docker-compose.ci-deploy.yml](docker-compose.ci-deploy.yml.md)
 
 Exemplo:
 - Dockerfile
