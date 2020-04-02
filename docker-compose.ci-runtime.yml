@@ -2,6 +2,6 @@ version: "3.6"
 
 services:
   sistema-cnj-jus-br:
-    image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH}.${VERSION}
+    image: ${DOCKER_REGISTRY}sistema.cnj.jus.br:${BRANCH}.${VERSION}
     build:
       target: runtime

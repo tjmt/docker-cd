@@ -48,19 +48,22 @@ Para uma imagem de aplicação em docker, existem 3 formas de se utilizar/config
 
 </details>
 
-
 ## Como Funciona?
 
 O repositório GIT deve conter os seguintes arquivos em sua raiz:
 - [`Dockerfile`](./docs/dockerfile.md)
 - [`docker-compose.yml`](./docs/docker-compose.yml.md)
 - [`docker-compose.override.yml`](./docs/docker-compose.override.yml.md)
-- CD/CI
-    - [`docker-compose.cd-debug.yml`](./docs/docker-compose.cd-debug.yml.md)
-    - [`docker-compose.cd-tests.yml`](./docs/docker-compose.cd-tests.yml.md)
-    - [`docker-compose.cd-build.yml`](./docs/docker-compose.cd-build.yml.md)
-    - [`docker-compose.cd-runtime.yml`](./docs/docker-compose.cd-runtime.yml.md)
-    - [`docker-compose.cd-deploy.yml`](./docs/docker-compose.cd-deploy.yml.md)
+- Continuous Integration (CI)
+  - [`docker-compose.ci-tests.yml`](./docs/docker-compose.ci-tests.yml.md)
+  - [`docker-compose.ci-debug.yml`](./docs/docker-compose.ci-debug.yml.md)
+  - [`docker-compose.ci-build.yml`](./docs/docker-compose.ci-build.yml.md)
+  - [`docker-compose.ci-runtime.yml`](./docs/docker-compose.ci-runtime.yml.md)
+  - [`docker-compose.ci-deploy.yml`](./docs/docker-compose.ci-deploy.yml.md) (Opcional)
+  - [`ci.sh`](./docs/ci.sh.md) (Executor da pipeline)
+- Continuos Delivery (CD)
+  - [`docker-compose.cd-release.yml`](./docs/docker-compose.cd-release.yml.md)
+  - [`cd.sh`](./docs/cd.sh.md) (Executor da pipeline)
 
 - Ambientes
     - [`docker-compose.env-{environment}.yml`](./docs/docker-compose.env-environment.yml.md)

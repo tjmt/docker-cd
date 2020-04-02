@@ -2,34 +2,33 @@ version: "3.6"
 
 services:
   sistema-cnj-jus-br:
-    image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH}.${VERSION}-deploy
+    image: tjmt/publicador:latest
     environment:
       # Nuget
       DEPLOY_NUGET: ${DEPLOY_NUGET:-false} # Indica se irá rodar o script que publica pacotes Nuget (nuget push)
       NUGET_PACKAGES_FOLDER: ${NUGET_PACKAGES_FOLDER:-/var/release/packages/nuget} # Caminho do pacote Nuget (.nupkg)
-      NUGET_LIFECYCLE_VERSION: ${NUGET_LIFECYCLE_VERSION} # Lifecycle do pacote Nuget
+      NUGET_LIFECYCLE_VERSION: ${NUGET_LIFECYCLE_VERSION:-} # Lifecycle do pacote Nuget
       NUGET_REGISTRY: ${NUGET_REGISTRY:-} # Registry para publicação do pacote Nuget
       NUGET_USER: ${NUGET_USER} # Usuário para login no registry Nuget
       NUGET_PASS: ${NUGET_PASS} # Senha para login no registry Nuget
-
       # NPM
       DEPLOY_NPM: ${DEPLOY_NPM:-false} # Indica se irá rodar o script que publica pacotes NPM (npm publish)
       NPM_PACKAGES_FOLDER: ${NPM_PACKAGES_FOLDER:-/var/release/packages/npm} # Caminho do pacote NPM (.tgz)
-      NPM_LIFECYCLE_VERSION: ${NPM_LIFECYCLE_VERSION} # Lifecycle do pacote NPM
+      NPM_LIFECYCLE_VERSION: ${NPM_LIFECYCLE_VERSION:-} # Lifecycle do pacote NPM
       NPM_REGISTRY: ${NPM_REGISTRY:-} # Registry para publicação do pacote NPM
       NPM_USER: ${NPM_USER} # Usuário para login no registry npm
       NPM_PASS: ${NPM_PASS} # Senha para login no registry npm
       NPM_EMAIL: ${NPM_EMAIL:-} # Email para login no registry npm
-
       # Kubernetes
       DEPLOY_KUBERNETES: ${DEPLOY_KUBERNETES:-false} # Indica se irá rodar o script que publica os YAML no Kubernetes (kubectl apply) 
       DESTROY_KUBERNETES_ENVIRONMENT: ${DESTROY_KUBERNETES_ENVIRONMENT:-false} # Indica se irá rodar o script que deleta os YAML no Kubernetes (kubectl delete)
       KUBERNETES_FOLDER: ${KUBERNETES_FOLDER:-/var/release/source} # Caminho dos arquivos YAML para publicação
       KUBECONFIG_PATH: ${KUBECONFIG_PATH:-/var/release/source/kubeconfig} # Caminho do kubeconfig para publicação
-
       # Kompose
-      # Caso o Kompose precise de outras variáveis de ambiente, elas devem ser inseridas aqui.
-      COMPOSE_PATH: ${COMPOSE_PATH} # Caso deseje utilizar o Kompose para converter YML em YAML, informar o caminho completo do docker-compose a ser transformado
       DOCKER_REGISTRY: ${DOCKER_REGISTRY:-}
-      VERSION: ${VERSION}
       BRANCH: ${BRANCH}
+      BRANCH_DNS: ${BRANCH_DNS}
+      VERSION: ${VERSION}
+      COMPOSE_PATH: ${COMPOSE_PATH} # Caso deseje utilizar o Kompose para converter YML em YAML, informar o caminho completo do docker-compose a ser transformado
+    volumes:
+      - ${COMPOSE_RELEASE_PATH}:/var/release

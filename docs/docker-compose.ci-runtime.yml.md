@@ -7,4 +7,4 @@ Pré requisitos:
 - target: `runtime`
 
 Exemplo:
-- [docker-compose.cd-runtime.yml](../docker-compose.cd-runtime.yml)
+- [docker-compose.ci-runtime.yml](../docker-compose.ci-runtime.yml)

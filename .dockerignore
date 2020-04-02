@@ -2,8 +2,6 @@ node_modules
 .vscode
 .git
 npm-debug.log
-cd-BUILD.sh
-cd-RELEASE.sh
 docker-extract
 TestResults
 bin/
@@ -11,5 +9,5 @@ obj/
 target/
 **/docker-compose*
 !docker-compose.dcproj
-!docker-compose.cd-deploy*
+!docker-compose.cd-release.yml
 !docker-compose.env*

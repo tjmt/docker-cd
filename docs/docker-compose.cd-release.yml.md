@@ -8,7 +8,7 @@ Neste fluxo, ele utiliza a imagem do `tjmt/publicador`, vinculando o caminho dos
 
 Pré requisitos:
 - image: 
-  - Utilizar a imagem gerada pelo `docker-compose.cd-runtime.yml`
+  - Utilizar a imagem gerada pelo `docker-compose.ci-runtime.yml`
 - environment: (Informar as variáveis necessárias para deploy da aplicação)
   - NUGET
     - DEPLOY_NUGET (*default:* `false`)
@@ -41,7 +41,7 @@ Pré requisitos:
   - COMPOSE_RELEASE_PATH _Informar o caminho dos artefatos gerados no processo de build_
 
 Exemplo:
-- [docker-compose.cd-deploy.yml](../docker-compose.cd-deploy.yml)
+- [docker-compose.cd-release.yml](../docker-compose.cd-release.yml)
 
 ## Método personalizado
 
@@ -49,7 +49,7 @@ Neste fluxo, ele cria uma imagem publicadora com o propósito de implantar/insta
 
 Pré requisitos:
 - image: 
-  - Utilizar a imagem gerada pelo próprio `docker-compose.yml`
+  - Utilizar a imagem gerada pelo [docker-compose.ci-deploy.yml](../docker-compose.ci-deploy.yml)
 
 Exemplo:
 - Dockerfile
@@ -66,6 +66,6 @@ COPY --from=build /app/www/ /var/release/www
 
 FROM runtime AS final
 ```
-- [docker-compose.cd-deploy.yml](../docker-compose.cd-deploy-custom.yml)
+- [docker-compose.cd-release.yml](../docker-compose.cd-release-custom.yml)
 
 No exemplo acima, ele está utilizando a própria imagem do `tjmt/publicador` para demonstrar uma outra forma de realizar o deploy da aplicação, ao invés do método convencional. Neste processo, ele deve copiar todos os arquivos `docker-compose.env` para o diretório `/var/release/source/`, visto que, esse é o caminho padrão que o publicador utiliza para converter os arquivos *docker-compose (YML)* para *Kubernetes (YAML)*. Ele também copia os artefatos gerados no build para o diretório `/var/release/www`, este procedimento que serve apenas para visualizar os arquivos gerados no processo de build.

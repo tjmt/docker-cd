@@ -1,0 +1,7 @@
+version: "3.6"
+
+services:
+  sistema-cnj-jus-br:
+    image: ${DOCKER_REGISTRY}sistema.cnj.jus.br:${BRANCH}.${VERSION}-deploy
+    build:
+      target: deploy

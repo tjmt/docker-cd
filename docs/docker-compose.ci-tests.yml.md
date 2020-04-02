@@ -16,15 +16,15 @@ version: '3.6'
 
 services:
   app-front-end:
-    image: ${DOCKER_REGISTRY}dsa/sistema.cnj.jus.br:${BRANCH}.${VERSION:-local}-tests
-    container_name: tests-tjmt-jus-br
+    image: ${DOCKER_REGISTRY}sistema.cnj.jus.br:${BRANCH}.${VERSION:-local}-tests
+    container_name: tests-cnj-jus-br
     build:
       target: tests
     environment:
       RUN_SONARQUBE: ${RUN_SONARQUBE:-true}
       SONARQUBE_URL: ${SONARQUBE_URL:-http://172.17.0.1:9000}
       SONARQUBE_LOGIN: ${SONARQUBE_LOGIN}
-      SONARQUBE_PROJECT: sistema.tjmt.jus.br
+      SONARQUBE_PROJECT: sistema.cnj.jus.br
       SONARQUBE_PROJECT_VERSION: ${VERSION:-local}
 ```
 </details>
@@ -37,8 +37,8 @@ version: '3.6'
 
 services:
   app-back-end:
-    image: ${DOCKER_REGISTRY}dsa/sistema-api.tjmt.jus.br:${BRANCH}.${VERSION:-local}-tests
-    container_name: tests-tjmt-jus-br
+    image: ${DOCKER_REGISTRY}sistema-api.cnj.jus.br:${BRANCH}.${VERSION:-local}-tests
+    container_name: tests-cnj-jus-br
     build:
       target: tests
     entrypoint: ["/entrypoint/wait-for-it.sh", "sistema-mssql:1433", "--", "/entrypoint/entrypoint.sh"]
@@ -50,11 +50,11 @@ services:
       RUN_SONARQUBE: ${RUN_SONARQUBE:-true}
       SONARQUBE_URL: ${SONARQUBE_URL:-http://172.17.0.1:9000}
       SONARQUBE_LOGIN: ${SONARQUBE_LOGIN}
-      SONARQUBE_PROJECT: sistema-api.tjmt.jus.br
+      SONARQUBE_PROJECT: sistema-api.cnj.jus.br
       SONARQUBE_PROJECT_VERSION: ${VERSION:-local}
 
   sistema-mssql:
-    image: ${DOCKER_REGISTRY}/dsa/sistema-mssql-server.tjmt.jus.br:20190827.1
+    image: ${DOCKER_REGISTRY}sistema-mssql-server.cnj.jus.br:20190827.1
     ports:
       - 1433:1433
     environment:

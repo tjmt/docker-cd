@@ -8,4 +8,4 @@ Pré requisitos:
 - target: `build`
 
 Exemplo:
-- [docker-compose.cd-build.yml](../docker-compose.cd-build.yml)
+- [docker-compose.ci-build.yml](../docker-compose.ci-build.yml)

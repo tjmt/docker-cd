@@ -18,7 +18,7 @@ ENTRYPOINT ./entrypoint-tests.sh
 #---------------Estágio usada para build/publish/pack
 FROM debug as build
 
-COPY docker-compose.cd-deploy* docker-compose.env* /app/source/
+COPY docker-compose.cd-release* docker-compose.env* /app/source/
 RUN npm run build -- --aot=true --build-optimizer=true --optimization=true --prod --configuration=production --base-href=/ --output-path=/app/www
 
 # Caso use pacote npm, descomentar abaixo

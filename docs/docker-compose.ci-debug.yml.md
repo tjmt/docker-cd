@@ -7,4 +7,4 @@ Pré requisitos:
 - target: `debug`
 
 Exemplo:
-- [docker-compose.cd-debug.yml](../docker-compose.cd-debug.yml)
+- [docker-compose.ci-debug.yml](../docker-compose.ci-debug.yml)
