@@ -1,0 +1,1 @@
+echo "CI - Executado depois do estágio de debug"

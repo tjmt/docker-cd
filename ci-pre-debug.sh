@@ -1,0 +1,1 @@
+echo "CI - Executado antes do estágio de debug"

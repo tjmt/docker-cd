@@ -1,13 +1,13 @@
 version: '3.6'
 
-services:
-  sistema-cnj-jus-br:
-    image: sistema.cnj.jus.br:local
-    build:
-      target: debug
-    environment:
-      AUTH_AUTHORITY: 'http://localhost:8080/auth/realms/master/'
-      AUTH_CLIENT_ID: 'http://localhost:4200'
-      AUTH_SCOPE: 'openid profile email roles offline_access'
-    ports:
-      - "4200:4200"
+# services:
+#   sistema-cnj-jus-br:
+#     image: sistema.cnj.jus.br:local
+#     build:
+#       target: debug
+#     environment:
+#       AUTH_AUTHORITY: 'http://localhost:8080/auth/realms/master/'
+#       AUTH_CLIENT_ID: 'http://localhost:4200'
+#       AUTH_SCOPE: 'openid profile email roles offline_access'
+#     ports:
+#       - "4200:4200"

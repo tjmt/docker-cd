@@ -1,11 +1,10 @@
 # CONTINUOUS DELIVERY
 # IMPORTANTE: Caso você utilize Git Bash (Windows) como linha de comando execute este script com 'MSYS_NO_PATHCONV=1' como prefixo.
-# Exemplo: MSYS_NO_PATHCONV=1 ./cd-RELEASE.sh
+# Exemplo: MSYS_NO_PATHCONV=1 . cd.sh
 clear
 
 # Variáveis de configuração geral
 export BRANCH=$(echo ${BRANCH:-$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')} | sed 's/refs\/heads\///g' | sed 's/refs\/tags\///g' | sed 's/\//-/g')
-export VERSION=${VERSION:-$(date '+%Y%m%d')-1}
 export DOCKER_REGISTRY=${DOCKER_REGISTRY:-}
 export DOCKER_LOGIN=${DOCKER_LOGIN:-}
 export DOCKER_PASSWORD=${DOCKER_PASSWORD:-}
@@ -44,6 +43,31 @@ fi
 # Tratamento do nome da branch para o DNS e artefatos Kubernetes utilizado no ambiente ALPHA
 export BRANCH_DNS=$(echo ${BRANCH} | sed 's/\./-/g')
 
+# Tratamento para capturar a versão dos artefatos de build
+export VERSION=${VERSION:-$(cat $COMPOSE_RELEASE_PATH/version)}
+
+preStage() {
+  if [[ -f "cd-pre-$1.sh" ]]; then
+    echo ""
+    echo "-----------------------------------------------------------------------"
+    echo "cd-pre-$1.sh detected"
+    echo "Running cd-pre-$1.sh"
+    . cd-pre-$1.sh
+    echo "-----------------------------------------------------------------------"
+  fi
+}
+
+postStage() {
+  if [[ -f "cd-post-$1.sh" ]]; then
+    echo ""
+    echo "-----------------------------------------------------------------------"
+    echo "cd-post-$1.sh detected"
+    echo "Running cd-post-$1.sh"
+    . cd-post-$1.sh
+    echo "-----------------------------------------------------------------------"
+  fi
+}
+
 echo "-----------------------------------------------------------------------"
 echo "Iniciando cd.sh (Continuous Delivery)."
 echo "-----------------------------------------------------------------------"
@@ -61,9 +85,16 @@ if [[ ! -z $DOCKER_REGISTRY && ! -z $DOCKER_LOGIN && ! -z $DOCKER_PASSWORD ]]; t
   echo "-----------------------------------------------------------------------"
 fi
 
+preStage release
 echo ""
 echo "-----------------------------------------------------------------------"
 echo "Publicação em ambiente ${DEPLOY_ENVIRONMENT}"
 docker-compose -f "docker-compose.cd-release.yml" up --abort-on-container-exit
 docker-compose -f "docker-compose.cd-release.yml" down --rmi local -v --remove-orphans
 echo "-----------------------------------------------------------------------"
+postStage release
+
+# Resetando as variáveis de ambiente
+unset BRANCH VERSION DOCKER_REGISTRY DOCKER_LOGIN DOCKER_PASSWORD DEPLOY_ENVIRONMENT DEPLOY_KUBERNETES DESTROY_KUBERNETES_ENVIRONMENT COMPOSE_PATH KUBECONFIG_PATH \
+  COMPOSE_RELEASE_PATH DEPLOY_NPM NPM_REGISTRY NPM_EMAIL NPM_USER NPM_PASS NPM_PACKAGES_FOLDER DEPLOY_NUGET NUGET_REGISTRY NUGET_USER NUGET_PASS NUGET_PACKAGES_FOLDER \
+  NPM_LIFECYCLE_VERSION NUGET_LIFECYCLE_VERSION BRANCH_DNS

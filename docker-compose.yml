@@ -2,8 +2,16 @@ version: '3.6'
 
 services:
   sistema-cnj-jus-br:
+    image: sistema.cnj.jus.br:local
     build:
       context: .
       dockerfile: Dockerfile
       args:
         BASE_HREF: /
+      target: debug
+    environment:
+      AUTH_AUTHORITY: 'http://localhost:8080/auth/realms/master/'
+      AUTH_CLIENT_ID: 'http://localhost:4200'
+      AUTH_SCOPE: 'openid profile email roles offline_access'
+    ports:
+      - "4200:4200"

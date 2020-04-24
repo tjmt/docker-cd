@@ -1,0 +1,1 @@
+echo "CD - Executado antes do estágio de debug"
