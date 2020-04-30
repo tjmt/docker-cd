@@ -61,12 +61,12 @@ O repositório GIT deve conter os seguintes arquivos em sua raiz:
   - [`docker-compose.ci-runtime.yml`](./docs/docker-compose.ci-runtime.yml.md)
   - [`docker-compose.ci-deploy.yml`](./docs/docker-compose.ci-deploy.yml.md) (Opcional)
   - [`ci.sh`](./docs/ci.sh.md) (Executor da pipeline)
-  - [`ci-pre-<stage>.sh`](./docs/ci-post-stage.sh.md) (Hooks de pré-execucação dos estágios - Opcional)
+  - [`ci-pre-<stage>.sh`](./docs/ci-pre-stage.sh.md) (Hooks de pré-execucação dos estágios - Opcional)
   - [`ci-post-<stage>.sh`](./docs/ci-post-stage.sh.md) (Hooks de pós-execucação dos estágios - Opcional)
 - Continuos Delivery (CD)
   - [`docker-compose.cd-release.yml`](./docs/docker-compose.cd-release.yml.md)
   - [`cd.sh`](./docs/cd.sh.md) (Executor da pipeline)
-  - [`cd-pre-<stage>.sh`](./docs/cd-post-stage.sh.md) (Hooks de pré-execucação dos estágios - Opcional)
+  - [`cd-pre-<stage>.sh`](./docs/cd-pre-stage.sh.md) (Hooks de pré-execucação dos estágios - Opcional)
   - [`cd-post-<stage>.sh`](./docs/cd-post-stage.sh.md) (Hooks de pós-execucação dos estágios - Opcional)
 
 - Ambientes
