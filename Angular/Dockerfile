@@ -1,4 +1,4 @@
-#---------------Estágio usado para rodar apenas em ambiente de desenvolvimento com propósito de realizar depuração de código
+#---------------Estágio usado para rodar os Testes (teste unitário, teste de integração, sonarqube)
 FROM tjmt/angular:node-10 as debug
 
 WORKDIR /source
@@ -9,7 +9,7 @@ COPY . .
 RUN chmod +x ./entrypoint-debug.sh
 ENTRYPOINT ./entrypoint-debug.sh
 
-#---------------Estágio usado para rodar os Testes (teste unitário, teste de integração, sonarqube)
+#---------------Estágio usado para rodar apenas em ambiente de desenvolvimento com propósito de realizar depuração de código
 FROM debug as tests
 
 RUN chmod +x ./entrypoint-tests.sh

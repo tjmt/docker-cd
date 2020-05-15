@@ -5,7 +5,7 @@ mkdir ./docker-extract/
 
 # Variáveis de configuração geral
 export BRANCH=$(echo ${BRANCH:-$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')} | sed 's/refs\/heads\///g' | sed 's/refs\/tags\///g' | sed 's/\//-/g' | sed 's/\./-/g')
-export VERSION=${VERSION:-$(date '+%Y%m%d.%H%M%S')}
+export VERSION=${VERSION:-$(date '+%Y%m%d%H%M%S')}
 export DOCKER_REGISTRY=${DOCKER_REGISTRY:-}
 export DOCKER_LOGIN=${DOCKER_LOGIN:-}
 export DOCKER_PASSWORD=${DOCKER_PASSWORD:-}
@@ -13,10 +13,10 @@ export DOCKER_PASSWORD=${DOCKER_PASSWORD:-}
 # Variáveis específicas utilizadas no build
 export ARTIFACT_STAGING_DIRECTORY=${ARTIFACT_STAGING_DIRECTORY:-./docker-extract}
 export DOCKER_PUSH=${DOCKER_PUSH:-false}
-export RUN_LOCAL=${RUN_LOCAL:-true}
-export REMOVE_CACHE=${REMOVE_CACHE:-false}
+export TARGET=${TARGET-}
 
 # Variáveis utilizadas nos testes
+export RUN_LOCAL=${RUN_LOCAL:-false}
 export RUN_TEST=${RUN_TEST:-false}
 export RUN_SONARQUBE=${RUN_SONARQUBE:-true}
 export SONARQUBE_URL=${SONARQUBE_URL:-http://localhost:9000}
@@ -56,11 +56,11 @@ echo "Iniciando ci.sh (Continuous Integration)."
 echo "-----------------------------------------------------------------------"
 
 # Tratativa para pegar secret variables da pipeline do VSTS
-if [[ -z $DOCKER_PASSWORD && ! -z "$1" ]]; then
+if [[ -z "$DOCKER_PASSWORD" && ! -z "$1" ]]; then
   export DOCKER_PASSWORD=$1
 fi
 
-if [[ ! -z $DOCKER_REGISTRY && ! -z $DOCKER_LOGIN && ! -z $DOCKER_PASSWORD ]]; then
+if [[ ! -z "$DOCKER_REGISTRY" && ! -z "$DOCKER_LOGIN" && ! -z "$DOCKER_PASSWORD" ]]; then
   echo ""
   echo "-----------------------------------------------------------------------"
   echo "Running docker login"
@@ -68,18 +68,21 @@ if [[ ! -z $DOCKER_REGISTRY && ! -z $DOCKER_LOGIN && ! -z $DOCKER_PASSWORD ]]; t
   echo "-----------------------------------------------------------------------"
 fi
 
-if [[ $RUN_LOCAL == 'true' ]]; then
+if [[ -z "$TARGET" || "$TARGET" == 'debug' ]]; then
+  preStage debug
   echo ""
   echo "-----------------------------------------------------------------------"
-  echo "Running docker-compose.yml"
-  docker-compose up --build
+  echo "Running docker-compose.ci-debug.yml"
+  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-debug.yml" build
   echo "-----------------------------------------------------------------------"
-
-  exit 0
+  postStage debug
+  
+  if [[ "$TARGET" == 'debug' ]]; then
+    exit 0
+  fi
 fi
 
-if [[ $RUN_TEST == 'true' ]]; then
-
+if [[ -z "$TARGET" || "$TARGET" == 'tests' ]]; then
   preStage tests
   echo ""
   echo "-----------------------------------------------------------------------"
@@ -91,18 +94,13 @@ if [[ $RUN_TEST == 'true' ]]; then
   echo ""
   echo "-----------------------------------------------------------------------"
   echo "Extraindo os artefatos de teste"
-  docker cp tests-tjmt-jus-br:/TestResults ${ARTIFACT_STAGING_DIRECTORY}/TestResults
+  docker cp tests-cnj-jus-br:/TestResults ${ARTIFACT_STAGING_DIRECTORY}/TestResults
   echo "-----------------------------------------------------------------------"
 
+  if [[ "$TARGET" == 'tests' ]]; then
+    exit 0
+  fi
 fi
-
-preStage debug
-echo ""
-echo "-----------------------------------------------------------------------"
-echo "Running docker-compose.ci-debug.yml"
-docker-compose -f "docker-compose.yml" -f "docker-compose.ci-debug.yml" build
-echo "-----------------------------------------------------------------------"
-postStage debug
 
 preStage build
 echo ""
@@ -115,7 +113,7 @@ postStage build
 echo ""
 echo "-----------------------------------------------------------------------"
 echo "Extraindo os artefatos de build"
-docker cp build-tjmt-jus-br:/app ${ARTIFACT_STAGING_DIRECTORY}/BuildArtifacts
+docker cp build-cnj-jus-br:/app ${ARTIFACT_STAGING_DIRECTORY}/BuildArtifacts
 echo "-----------------------------------------------------------------------"
 
 preStage runtime
@@ -134,7 +132,7 @@ postStage runtime
 # echo "-----------------------------------------------------------------------"
 # postStage deploy
 
-if [[ $DOCKER_PUSH == 'true' ]]; then
+if [[ "$DOCKER_PUSH" == 'true' ]]; then
   echo ""
   echo "-----------------------------------------------------------------------"
   echo "Docker push to registry"
@@ -147,23 +145,11 @@ fi
 echo ""
 echo "-----------------------------------------------------------------------"
 echo "Running docker-compose down"
-if [[ $REMOVE_CACHE == 'true' ]]; then
-  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-tests.yml" down -v --rmi local --remove-orphans
-  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-debug.yml" down -v --rmi local --remove-orphans
-  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-build.yml" down -v --rmi local --remove-orphans
-  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-runtime.yml" down -v --rmi local --remove-orphans
-  # docker-compose -f "docker-compose.yml" -f "docker-compose.ci-deploy.yml" down -v --rmi local --remove-orphans
-else
-  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-tests.yml" down -v
-  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-debug.yml" down -v
-  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-build.yml" down -v
-  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-runtime.yml" down -v
-  # docker-compose -f "docker-compose.yml" -f "docker-compose.ci-deploy.yml" down -v
-fi
+docker-compose -f "docker-compose.yml" -f "docker-compose.ci-debug.yml" down -v --rmi local --remove-orphans
+docker-compose -f "docker-compose.yml" -f "docker-compose.ci-tests.yml" down -v --rmi local --remove-orphans
+docker-compose -f "docker-compose.yml" -f "docker-compose.ci-build.yml" down -v --rmi local --remove-orphans
+docker-compose -f "docker-compose.yml" -f "docker-compose.ci-runtime.yml" down -v --rmi local --remove-orphans
+# docker-compose -f "docker-compose.yml" -f "docker-compose.ci-deploy.yml" down -v --rmi local --remove-orphans
 echo "-----------------------------------------------------------------------"
 
 echo $VERSION > $ARTIFACT_STAGING_DIRECTORY/BuildArtifacts/source/version
-
-# Resetando as variáveis de ambiente
-unset BRANCH VERSION DOCKER_REGISTRY DOCKER_LOGIN DOCKER_PASSWORD ARTIFACT_STAGING_DIRECTORY DOCKER_PUSH RUN_LOCAL REMOVE_CACHE RUN_TEST RUN_SONARQUBE SONARQUBE_URL \
-  SONARQUBE_LOGIN DOTNET_TEST_FILTER NG_E2E_SPECS NG_TEST_SPECS

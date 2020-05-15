@@ -52,22 +52,38 @@ Para uma imagem de aplicação em docker, existem 3 formas de se utilizar/config
 
 O repositório GIT deve conter os seguintes arquivos em sua raiz:
 - [`Dockerfile`](./docs/dockerfile.md)
+> É um arquivo de texto que descreve as etapas que o Docker precisa realizar para se criar a imagem da aplicação.
 - [`docker-compose.yml`](./docs/docker-compose.yml.md)
+> Responsável por orquestar múltiplos containers Docker. Deverá conter apenas as aplicações principais que fazem parte do projeto.
 - [`docker-compose.override.yml`](./docs/docker-compose.override.yml.md)
+> Responsável por adicionar e sobscrever os serviços contidos no arquivo *docker-compose.yml*. Deverá ser utilizado para compor os serviços necessários para execução da aplicação em ambiente local.
 - Continuous Integration (CI)
-  - [`docker-compose.ci-tests.yml`](./docs/docker-compose.ci-tests.yml.md)
   - [`docker-compose.ci-debug.yml`](./docs/docker-compose.ci-debug.yml.md)
+  > Responsável por criar uma imagem que permite a execução da aplicação em modo de depuração. Deverá ser publicada no registry para ser utilizada em ambientes de desenvolvimento.
+  - [`docker-compose.ci-tests.yml`](./docs/docker-compose.ci-tests.yml.md)
+  > Responsável por criar uma imagem de execução de testes. É neste arquivo que deverá ser adicionado todos os serviços necessários para se efetuar os testes, exemplo: banco de dados para realizar teste de integração. É nesta etapa também, que ocorre a extração dos resultados de execução dos testes.
   - [`docker-compose.ci-build.yml`](./docs/docker-compose.ci-build.yml.md)
+  > Responsável por criar uma imagem que irá conter os artefatos de produção gerados no processo de build (código compilado). É neste estágio que os artefatos serão extraídos para serem publicados em ambiente produtivo.
   - [`docker-compose.ci-runtime.yml`](./docs/docker-compose.ci-runtime.yml.md)
+  > Responsável por criar uma imagem que será utilizada em ambiente de produção. Esta imagem deverá ser publicada no registry.
   - [`docker-compose.ci-deploy.yml`](./docs/docker-compose.ci-deploy.yml.md) (Opcional)
-  - [`ci.sh`](./docs/ci.sh.md) (Executor da pipeline)
-  - [`ci-pre-<stage>.sh`](./docs/ci-pre-stage.sh.md) (Hooks de pré-execucação dos estágios - Opcional)
-  - [`ci-post-<stage>.sh`](./docs/ci-post-stage.sh.md) (Hooks de pós-execucação dos estágios - Opcional)
+  > Responsável por criar uma imagem que irá realizar a publicação da aplicação. Sua implementação é **opcional**, pois você pode utilizar uma imagem de publicação existente no processo de implatanção (*Continuous Delivery*), como por exemplo, a imagem *tjmt/publicador*. Sua imagem deverá ser publicada no registry.
+  - [`ci.sh`](./docs/ci.sh.md)
+  > Responsável pela execução da pipeline deste fluxo de *Continuous Integration*.
+  - [`ci-pre-<stage>.sh`](./docs/ci-pre-stage.sh.md) (Opcional)
+  > Responsável por conter hooks de pré-execucação para cada estágio deste fluxo de *Continuous Integration*. Sua implementação é **opcional**.
+  - [`ci-post-<stage>.sh`](./docs/ci-post-stage.sh.md) (Opcional)
+  > Responsável por conter hooks de pós-execucação para cada estágio deste fluxo de *Continuous Integration*. Sua implementação é **opcional**.
 - Continuos Delivery (CD)
   - [`docker-compose.cd-release.yml`](./docs/docker-compose.cd-release.yml.md)
-  - [`cd.sh`](./docs/cd.sh.md) (Executor da pipeline)
-  - [`cd-pre-<stage>.sh`](./docs/cd-pre-stage.sh.md) (Hooks de pré-execucação dos estágios - Opcional)
-  - [`cd-post-<stage>.sh`](./docs/cd-post-stage.sh.md) (Hooks de pós-execucação dos estágios - Opcional)
+  > Responsável pela implantação da aplicação no ambiente desejado.
+  - [`cd.sh`](./docs/cd.sh.md)
+  > Responsável pela execução da pipeline deste fluxo de *Continuous Delivery*.
+  - [`cd-pre-<stage>.sh`](./docs/cd-pre-stage.sh.md) (Opcional)
+  > Responsável por conter hooks de pré-execucação para cada estágio deste fluxo de *Continuous Delivery*. Sua implementação é **opcional**.
+  - [`cd-post-<stage>.sh`](./docs/cd-post-stage.sh.md) (Opcional)
+  > Responsável por conter hooks de pós-execucação para cada estágio deste fluxo de *Continuous Delivery*. Sua implementação é **opcional**.
 
 - Ambientes
   - [`docker-compose.env-{environment}.yml`](./docs/docker-compose.env-environment.yml.md)
+  > Responsável por conter as configurações específicas da aplicação para o ambiente desejado. Exemplo: variáveis de ambiente, DNS, limite de recursos, tamanho de volume, etc.

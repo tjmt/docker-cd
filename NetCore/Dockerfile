@@ -1,7 +1,5 @@
-# ARG DOCKER_REGISTRY=${DOCKER_REGISTRY}
-
-#---------------Estágio usado para rodar os Testes (teste unitário, teste de integração, sonarqube)
-FROM tjmt/dotnetcore/sdk:3.0.100 as tests
+#---------------Estágio usado para rodar apenas em ambiente de desenvolvimento com propósito de realizar depuração de código
+FROM tjmt/dotnetcore/sdk:3.0.100 as debug
 
 ENV SOLUTION_NAME=Portais-API-DotNet-Seed.sln
 ENV PROJECT_NAME=PJMT.Aurora.API
@@ -21,16 +19,17 @@ RUN dotnet restore ${SOLUTION_NAME} -v m
 
 COPY . .
 
+RUN chmod +x ./entrypoint-debug.sh
+ENTRYPOINT ./entrypoint-debug.sh
+
+#---------------Estágio usado para rodar os Testes (teste unitário, teste de integração, sonarqube)
+FROM debug as tests
+
 RUN chmod +x ./entrypoint-tests.sh
 ENTRYPOINT ./entrypoint-tests.sh
 
-#---------------Estágio usado para rodar apenas em ambiente de desenvolvimento com propósito de realizar depuração de código
-FROM tests as debug
-
-ENTRYPOINT dotnet run -c Debug --no-launch-profile -p ./src/${PROJECT_NAME}
-
 #---------------Estágio usado para build/publish/pack
-FROM tests as build
+FROM debug as build
 
 COPY docker-compose.cd-release.yml docker-compose.env* cd.sh /app/source/
 

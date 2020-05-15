@@ -10,8 +10,11 @@ services:
       DOTNET_TEST_FILTER: ${DOTNET_TEST_FILTER:-}
       NG_E2E_SPECS: ${NG_E2E_SPECS:-./src/features/**/*.feature}
       NG_TEST_SPECS: ${NG_TEST_SPECS:-.}
+      RUN_LOCAL: ${RUN_LOCAL:-false}
+      RUN_TEST: ${RUN_TEST:-false}
       RUN_SONARQUBE: ${RUN_SONARQUBE:-false}
       SONARQUBE_URL: ${SONARQUBE_URL:-http://172.17.0.1:9000}
       SONARQUBE_LOGIN: ${SONARQUBE_LOGIN:-cad082e156043820ab75182dcc8f4798f1bea3c0}
       SONARQUBE_PROJECT: sistema.cnj.jus.br
       SONARQUBE_PROJECT_VERSION: ${VERSION:-local}
+      TARGET: ${TARGET-}

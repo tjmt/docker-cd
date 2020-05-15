@@ -5,7 +5,7 @@ clear
 
 # Variáveis de configuração geral
 export BRANCH=$(echo ${BRANCH:-$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')} | sed 's/refs\/heads\///g' | sed 's/refs\/tags\///g' | sed 's/\//-/g')
-export DOCKER_REGISTRY=${DOCKER_REGISTRY:-}
+export DOCKER_REGISTRY=${DOCKER_REGISTRY:-nexusdocker.tjmt.jus.br/}
 export DOCKER_LOGIN=${DOCKER_LOGIN:-}
 export DOCKER_PASSWORD=${DOCKER_PASSWORD:-}
 
@@ -16,7 +16,7 @@ export DEPLOY_ENVIRONMENT=$(echo ${DEPLOY_ENVIRONMENT:-alpha} | tr '[:upper:]' '
 export DEPLOY_KUBERNETES=${DEPLOY_KUBERNETES:-true}
 export DESTROY_KUBERNETES_ENVIRONMENT=${DESTROY_KUBERNETES_ENVIRONMENT:-false}
 export COMPOSE_PATH=docker-compose.env-${DEPLOY_ENVIRONMENT}.yml
-export KUBECONFIG_PATH=${KUBECONFIG_PATH:-}
+export KUBECONFIG_PATH=${KUBECONFIG_PATH:-/entrypoint/kubernetes/kubeconfig/dev}
 export COMPOSE_RELEASE_PATH=${COMPOSE_RELEASE_PATH:-./docker-extract/BuildArtifacts/source}
 
 # NPM - Variáveis específicas utilizadas no publicador
@@ -93,8 +93,3 @@ docker-compose -f "docker-compose.cd-release.yml" up --abort-on-container-exit
 docker-compose -f "docker-compose.cd-release.yml" down --rmi local -v --remove-orphans
 echo "-----------------------------------------------------------------------"
 postStage release
-
-# Resetando as variáveis de ambiente
-unset BRANCH VERSION DOCKER_REGISTRY DOCKER_LOGIN DOCKER_PASSWORD DEPLOY_ENVIRONMENT DEPLOY_KUBERNETES DESTROY_KUBERNETES_ENVIRONMENT COMPOSE_PATH KUBECONFIG_PATH \
-  COMPOSE_RELEASE_PATH DEPLOY_NPM NPM_REGISTRY NPM_EMAIL NPM_USER NPM_PASS NPM_PACKAGES_FOLDER DEPLOY_NUGET NUGET_REGISTRY NUGET_USER NUGET_PASS NUGET_PACKAGES_FOLDER \
-  NPM_LIFECYCLE_VERSION NUGET_LIFECYCLE_VERSION BRANCH_DNS
