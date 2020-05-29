@@ -23,7 +23,7 @@ if [[ "$TARGET" == 'tests' || "$RUN_TEST" == 'true' ]]; then
 		echo "SONARQUBE_URL: $SONARQUBE_URL"        
 		echo "-------------------------------------------------------"
 
-	echo "Password: $SONARQUBE_PASSWORD"
+		echo "Password: $SONARQUBE_PASSWORD"
 		#dotnet sonarscanner não aceita SONARQUBE_PASSWORD em branco
 		#/d:sonar.password=$SONARQUBE_PASSWORD
 		dotnet sonarscanner begin /k:"$SONARQUBE_PROJECT" /v:"$SONARQUBE_PROJECT_VERSION" /d:sonar.login=$SONARQUBE_LOGIN /d:sonar.host.url=$SONARQUBE_URL \

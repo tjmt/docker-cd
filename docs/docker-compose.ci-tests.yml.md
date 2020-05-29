@@ -17,7 +17,7 @@ version: '3.6'
 services:
   app-front-end:
     image: ${DOCKER_REGISTRY}sistema.cnj.jus.br:${BRANCH}.${VERSION:-local}-tests
-    container_name: tests-cnj-jus-br
+    container_name: ci-tests-artifacts
     build:
       target: tests
     environment:
@@ -38,7 +38,7 @@ version: '3.6'
 services:
   app-back-end:
     image: ${DOCKER_REGISTRY}sistema-api.cnj.jus.br:${BRANCH}.${VERSION:-local}-tests
-    container_name: tests-cnj-jus-br
+    container_name: ci-tests-artifacts
     build:
       target: tests
     entrypoint: ["/entrypoint/wait-for-it.sh", "sistema-mssql:1433", "--", "/entrypoint/entrypoint.sh"]

@@ -9,6 +9,7 @@ export VERSION=${VERSION:-$(date '+%Y%m%d%H%M%S')}
 export DOCKER_REGISTRY=${DOCKER_REGISTRY:-}
 export DOCKER_LOGIN=${DOCKER_LOGIN:-}
 export DOCKER_PASSWORD=${DOCKER_PASSWORD:-}
+export DOCKER_SERVICES=${DOCKER_SERVICES:-}
 
 # Variáveis específicas utilizadas no build
 export ARTIFACT_STAGING_DIRECTORY=${ARTIFACT_STAGING_DIRECTORY:-./docker-extract}
@@ -19,7 +20,7 @@ export TARGET=${TARGET-}
 export RUN_LOCAL=${RUN_LOCAL:-false}
 export RUN_TEST=${RUN_TEST:-false}
 export RUN_SONARQUBE=${RUN_SONARQUBE:-true}
-export SONARQUBE_URL=${SONARQUBE_URL:-http://localhost:9000}
+export SONARQUBE_URL=${SONARQUBE_URL:-http://172.17.0.1:9000}
 export SONARQUBE_LOGIN=${SONARQUBE_LOGIN:-}
 
 # .NET - Variáveis específicas utilizadas nos testes
@@ -73,7 +74,7 @@ if [[ -z "$TARGET" || "$TARGET" == 'debug' ]]; then
   echo ""
   echo "-----------------------------------------------------------------------"
   echo "Running docker-compose.ci-debug.yml"
-  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-debug.yml" build
+  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-debug.yml" build $DOCKER_SERVICES
   echo "-----------------------------------------------------------------------"
   postStage debug
   
@@ -87,14 +88,14 @@ if [[ -z "$TARGET" || "$TARGET" == 'tests' ]]; then
   echo ""
   echo "-----------------------------------------------------------------------"
   echo "Running docker-compose.ci-tests.yml"
-  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-tests.yml" up --build --force-recreate --abort-on-container-exit
+  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-tests.yml" up --build --force-recreate --abort-on-container-exit $DOCKER_SERVICES
   echo "-----------------------------------------------------------------------"
   postStage tests
 
   echo ""
   echo "-----------------------------------------------------------------------"
   echo "Extraindo os artefatos de teste"
-  docker cp tests-cnj-jus-br:/TestResults ${ARTIFACT_STAGING_DIRECTORY}/TestResults
+  docker cp ci-tests-artifacts:/TestResults ${ARTIFACT_STAGING_DIRECTORY}/TestResults
   echo "-----------------------------------------------------------------------"
 
   if [[ "$TARGET" == 'tests' ]]; then
@@ -106,21 +107,21 @@ preStage build
 echo ""
 echo "-----------------------------------------------------------------------"
 echo "Running docker-compose.ci-build.yml"
-docker-compose -f "docker-compose.yml" -f "docker-compose.ci-build.yml" up --build --force-recreate --no-start
+docker-compose -f "docker-compose.yml" -f "docker-compose.ci-build.yml" up --build --force-recreate --no-start $DOCKER_SERVICES
 echo "-----------------------------------------------------------------------"
 postStage build
 
 echo ""
 echo "-----------------------------------------------------------------------"
 echo "Extraindo os artefatos de build"
-docker cp build-cnj-jus-br:/app ${ARTIFACT_STAGING_DIRECTORY}/BuildArtifacts
+docker cp ci-build-artifacts:/app ${ARTIFACT_STAGING_DIRECTORY}/BuildArtifacts
 echo "-----------------------------------------------------------------------"
 
 preStage runtime
 echo ""
 echo "-----------------------------------------------------------------------"
 echo "Running docker-compose.ci-runtime.yml"
-docker-compose -f "docker-compose.yml" -f "docker-compose.ci-runtime.yml" build
+docker-compose -f "docker-compose.yml" -f "docker-compose.ci-runtime.yml" build $DOCKER_SERVICES
 echo "-----------------------------------------------------------------------"
 postStage runtime
 
@@ -136,9 +137,9 @@ if [[ "$DOCKER_PUSH" == 'true' ]]; then
   echo ""
   echo "-----------------------------------------------------------------------"
   echo "Docker push to registry"
-  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-debug.yml" push
-  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-runtime.yml" push
-  # docker-compose -f "docker-compose.yml" -f "docker-compose.ci-deploy.yml" push
+  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-debug.yml" push $DOCKER_SERVICES
+  docker-compose -f "docker-compose.yml" -f "docker-compose.ci-runtime.yml" push $DOCKER_SERVICES
+  # docker-compose -f "docker-compose.yml" -f "docker-compose.ci-deploy.yml" push $DOCKER_SERVICES
   echo "-----------------------------------------------------------------------"
 fi
 

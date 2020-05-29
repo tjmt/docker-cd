@@ -11,6 +11,7 @@ Pré requisitos:
     - **DOCKER_REGISTRY** - endereço do registry privado. Caso não tenha, deixe o valor em branco para ele utilizar o registry público oficial
     - **DOCKER_LOGIN** - login do registry privado
     - **DOCKER_PASSWORD** - senha do registry privado
+    - **DOCKER_SERVICES** - indica quais serão os serviços do Docker-Compose a serem utilizados
 
   - Variável que define o ambiente em que será realizado o deploy
     - **DEPLOY_ENVIRONMENT** - ambiente em que será realizado o deploy

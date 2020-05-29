@@ -3,6 +3,6 @@ version: "3.6"
 services:
   sistema-cnj-jus-br:
     image: ${DOCKER_REGISTRY}sistema.cnj.jus.br:${BRANCH}.${VERSION}-build
-    container_name: build-cnj-jus-br
+    container_name: ci-build-artifacts
     build:
       target: build

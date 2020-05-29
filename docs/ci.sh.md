@@ -11,11 +11,13 @@ Pré requisitos:
     - **DOCKER_REGISTRY** - endereço do registry privado. Caso não tenha, deixe o valor em branco para ele utilizar o registry público oficial
     - **DOCKER_LOGIN** - login do registry privado
     - **DOCKER_PASSWORD** - senha do registry privado
+    - **DOCKER_SERVICES** - indica quais serão os serviços do Docker-Compose a serem utilizados
 
   - Variáveis específicas utilizadas no build
     - **ARTIFACT_STAGING_DIRECTORY** - path utilizado para copiar os artefatos gerados durante processo de teste e build
     - **DOCKER_PUSH** - flag para indicar se realizará push das imagens
     - **RUN_LOCAL** - flag para indicar se irá rodar a aplicação local
+    - **TARGET** - indica qual será o estágio de Docker a ser executado
 
   - Variáveis utilizadas nos testes
     - **RUN_TEST** - flag para indicar se irá rodar os testes

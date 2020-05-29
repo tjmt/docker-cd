@@ -18,7 +18,17 @@ ENTRYPOINT ./entrypoint-tests.sh
 #---------------Estágio usada para build/publish/pack
 FROM debug as build
 
-COPY docker-compose.cd-release* docker-compose.env* /app/source/
+COPY docker-compose.cd-release.yml cd.sh /app/source/
+
+# Se precisar utilizar arquivos de ambiente customizados, ajuste a variável abaixo com o nome desejado.
+# Exemplo: Caso o nome do arquivo seguir o padrão 'docker-compose.env-api-{ambiente}.yml', passe o valor como 'ENV_SERVICES=api-'
+ENV ENV_SERVICES=
+
+COPY docker-compose.env-${ENV_SERVICES}alpha.yml /app/source/docker-compose.env-alpha.yml
+COPY docker-compose.env-${ENV_SERVICES}beta.yml /app/source/docker-compose.env-beta.yml
+COPY docker-compose.env-${ENV_SERVICES}rc.yml /app/source/docker-compose.env-rc.yml
+COPY docker-compose.env-${ENV_SERVICES}stable.yml /app/source/docker-compose.env-stable.yml
+
 RUN npm run build -- --aot=true --build-optimizer=true --optimization=true --prod --configuration=production --base-href=/ --output-path=/app/www
 
 # Caso use pacote npm, descomentar abaixo
