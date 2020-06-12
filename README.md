@@ -85,6 +85,18 @@ O repositório GIT deve conter os seguintes arquivos em sua raiz:
   
     Responsável por criar uma imagem que irá realizar a publicação da aplicação. Sua implementação é **opcional**, pois você pode utilizar uma imagem de publicação existente no processo de implatanção (*Continuous Delivery*), como por exemplo, a imagem *tjmt/publicador*. Sua imagem deverá ser publicada no registry.
 
+    - [`entrypoint-debug.sh`]
+  
+    Script responsável por especificar os comandos que serão executados na inicialização do container da imagem de DEBUG.
+
+    - [`entrypoint-tests.sh`]
+  
+    Script responsável por especificar os comandos que serão executados na inicialização do container da imagem de TESTS.
+
+    - [`entrypoint.sh`]
+  
+    Script responsável por especificar os comandos que serão executados na inicialização do container da imagem de RUNTIME.
+
   - [`ci.sh`](./docs/ci.sh.md)
   
     Responsável pela execução da pipeline deste fluxo de *Continuous Integration*.

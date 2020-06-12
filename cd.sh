@@ -46,7 +46,7 @@ fi
 export BRANCH_DNS=$(echo ${BRANCH} | sed 's/\./-/g')
 
 # Tratamento para capturar a versão dos artefatos de build
-export VERSION=${VERSION:-$(cat $COMPOSE_RELEASE_PATH/version)}
+export VERSION=${VERSION:-$(cat $COMPOSE_RELEASE_PATH/source/version)}
 
 preStage() {
   if [[ -f "cd-pre-$1.sh" ]]; then
