@@ -23,7 +23,7 @@ Pré requisitos:
     - **RUN_TEST** - flag para indicar se irá rodar os testes
     - **RUN_SONARQUBE** - flag para indicar se irá rodar o sonarqube
     - **SONARQUBE_URL** - endereço do sonarqube, caso tenha
-    - **SONARQUBE_LOGIN** - login do sonarqube, caso tenha
+    - **SONARQUBE_LOGIN** - login (token) do sonarqube, caso tenha
 
   - .NET - Variáveis específicas utilizadas nos testes
     - **DOTNET_TEST_FILTER** - filtro de testes utilizado no comando `dotnet test --filter`
