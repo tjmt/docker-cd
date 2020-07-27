@@ -4,7 +4,7 @@ rm -rf ./docker-extract/
 mkdir ./docker-extract/
 
 # Variáveis de configuração geral
-export BRANCH=$(echo ${BRANCH:-$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')} | sed 's/refs\/heads\///g' | sed 's/refs\/tags\///g' | sed 's/\//-/g' | sed 's/\./-/g')
+export BRANCH=$(echo ${BRANCH:-$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')} | sed 's/refs\/heads\///g' | sed 's/refs\/tags\///g' | sed 's/\//-/g')
 export VERSION=${VERSION:-$(date '+%Y%m%d%H%M%S')}
 export DOCKER_REGISTRY=${DOCKER_REGISTRY:-}
 export DOCKER_LOGIN=${DOCKER_LOGIN:-}
